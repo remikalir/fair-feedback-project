@@ -15,6 +15,9 @@ const COLORS = {
   green: "#2d6a4f",
   greenLight: "#e8f3ed",
   greenDark: "#1b4332",
+  azure: "#1392D3",
+  azureLight: "#e8f4fb",
+  azureDark: "#0b6fa3",
   text: "#2d3436",
   textSecondary: "#636e72",
   bg: "#faf9f7",
@@ -33,7 +36,7 @@ function Nav({ current, onNav }) {
     <nav style={{
       borderBottom: `1px solid ${COLORS.slate200}`,
       background: COLORS.white,
-      padding: "0 2rem",
+      padding: "0 1.25rem",
       position: "sticky",
       top: 0,
       zIndex: 100,
@@ -44,7 +47,10 @@ function Nav({ current, onNav }) {
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        height: 56,
+        minHeight: 56,
+        flexWrap: "wrap",
+        gap: "4px 0",
+        padding: "8px 0",
       }}>
         <button
           onClick={() => onNav("home")}
@@ -62,7 +68,7 @@ function Nav({ current, onNav }) {
         >
           The Fair Feedback Project
         </button>
-        <div style={{ display: "flex", gap: 8 }}>
+        <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
           {NAV_ITEMS.map((item) => (
             <button
               key={item.id}
@@ -71,7 +77,7 @@ function Nav({ current, onNav }) {
                 background: current === item.id ? COLORS.slate100 : "none",
                 border: "none",
                 cursor: "pointer",
-                padding: "6px 14px",
+                padding: "6px 12px",
                 borderRadius: 6,
                 fontSize: 14,
                 color: current === item.id ? COLORS.slate900 : COLORS.slate600,
@@ -90,17 +96,24 @@ function Nav({ current, onNav }) {
 }
 
 function Landing({ onNav }) {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 640);
+    window.addEventListener("resize", handler);
+    return () => window.removeEventListener("resize", handler);
+  }, []);
+
   return (
     <div>
       <div style={{
         textAlign: "center",
-        padding: "5rem 2rem 3rem",
+        padding: isMobile ? "3rem 1.25rem 2rem" : "5rem 2rem 3rem",
         maxWidth: 720,
         margin: "0 auto",
       }}>
         <h1 style={{
           fontFamily: "'Source Serif 4', Georgia, serif",
-          fontSize: 40,
+          fontSize: isMobile ? 30 : 40,
           fontWeight: 600,
           color: COLORS.slate900,
           lineHeight: 1.15,
@@ -110,7 +123,7 @@ function Landing({ onNav }) {
           The Fair Feedback Project
         </h1>
         <p style={{
-          fontSize: 18,
+          fontSize: isMobile ? 16 : 18,
           color: COLORS.slate600,
           lineHeight: 1.65,
           margin: "0 0 0.5rem",
@@ -119,7 +132,7 @@ function Landing({ onNav }) {
           Evidence-based strategies for addressing bias in student evaluations of teaching.
         </p>
         <p style={{
-          fontSize: 15,
+          fontSize: isMobile ? 14 : 15,
           color: COLORS.slate500,
           lineHeight: 1.6,
           margin: "0 auto 3.5rem",
@@ -133,9 +146,9 @@ function Landing({ onNav }) {
       <div style={{
         maxWidth: 800,
         margin: "0 auto 4rem",
-        padding: "0 2rem",
+        padding: "0 1.25rem",
         display: "grid",
-        gridTemplateColumns: "1fr 1fr",
+        gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
         gap: 24,
       }}>
         <TrackCard
@@ -160,7 +173,7 @@ function Landing({ onNav }) {
       <div style={{
         maxWidth: 640,
         margin: "0 auto 5rem",
-        padding: "0 2rem",
+        padding: "0 1.25rem",
         textAlign: "center",
       }}>
         <div style={{
@@ -282,7 +295,7 @@ function Prose({ children }) {
     <div style={{
       maxWidth: 680,
       margin: "0 auto",
-      padding: "3rem 2rem 5rem",
+      padding: "3rem 1.25rem 5rem",
       fontFamily: "'Source Sans 3', system-ui, sans-serif",
       fontSize: 16,
       lineHeight: 1.75,
@@ -381,11 +394,11 @@ function FAQSection({ children, id }) {
   );
 }
 
-function BackToTop({ faqTopRef }) {
+function BackToTop({ topRef }) {
   return (
     <div style={{ margin: "1.5rem 0 0", textAlign: "right" }}>
       <button
-        onClick={() => faqTopRef.current?.scrollIntoView({ behavior: "smooth" })}
+        onClick={() => topRef.current?.scrollIntoView({ behavior: "smooth" })}
         style={{
           background: "none",
           border: "none",
@@ -404,18 +417,95 @@ function BackToTop({ faqTopRef }) {
   );
 }
 
+function SectionNavButtons({ sections, color, colorLight, colorDark }) {
+  const scrollTo = (id) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
+  return (
+    <div style={{
+      display: "flex",
+      flexWrap: "wrap",
+      gap: 8,
+      margin: "0 0 1rem",
+    }}>
+      {sections.map((s) => (
+        <button
+          key={s.id}
+          onClick={() => scrollTo(s.id)}
+          style={{
+            background: colorLight,
+            border: "1px solid transparent",
+            borderRadius: 6,
+            padding: "6px 14px",
+            fontSize: 13,
+            color: colorDark,
+            cursor: "pointer",
+            fontFamily: "'Source Sans 3', system-ui, sans-serif",
+            fontWeight: 500,
+            transition: "all 0.15s ease",
+          }}
+          onMouseEnter={(e) => { e.target.style.borderColor = color; }}
+          onMouseLeave={(e) => { e.target.style.borderColor = "transparent"; }}
+        >
+          {s.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function SectionDivider({ id, children, color }) {
+  return (
+    <div>
+      <h2 id={id} style={{
+        fontFamily: "'Source Sans 3', system-ui, sans-serif",
+        fontSize: 13,
+        fontWeight: 600,
+        color: color,
+        textTransform: "uppercase",
+        letterSpacing: "0.06em",
+        margin: "3rem 0 0.5rem",
+        paddingTop: "1rem",
+        borderTop: `1px solid ${COLORS.slate200}`,
+        scrollMarginTop: 72,
+      }}>{children}</h2>
+    </div>
+  );
+}
+
+const ABOUT_SECTIONS = [
+  { id: "about-why", label: "Why this project" },
+  { id: "about-research", label: "The research" },
+  { id: "about-action", label: "Invitation to action" },
+  { id: "about-references", label: "Selected references" },
+];
+
+const PRINCIPLES_SECTIONS = [
+  { id: "prin-structural", label: "Bias is structural" },
+  { id: "prin-evidence", label: "Evidence-based recommendations" },
+  { id: "prin-practice", label: "Professional best practice" },
+  { id: "prin-limitations", label: "Transparency about limitations" },
+  { id: "prin-nuance", label: "Care and nuance" },
+];
+
 function AboutPage() {
+  const topRef = useRef(null);
+
   return (
     <Prose>
+      <div ref={topRef} style={{ scrollMarginTop: 72 }} />
       <H1>About The Fair Feedback Project</H1>
 
-      <H2>Why The Fair Feedback Project exists</H2>
+      <SectionNavButtons sections={ABOUT_SECTIONS} color={COLORS.azure} colorLight={COLORS.azureLight} colorDark={COLORS.azureDark} />
+
+      <SectionDivider id="about-why" color={COLORS.azure}>Why The Fair Feedback Project exists</SectionDivider>
       <P>Student evaluations of teaching (SETs) are among the most consequential and controversial documents in higher education. At more than 16,000 institutions worldwide, these instruments shape decisions about hiring, reappointment, tenure, promotion, and compensation. In many departments, they represent the <Em>only</Em> systematic metric of teaching performance and quality.</P>
       <P>Yet decades of peer-reviewed research — spanning multiple disciplines, methodologies, and national contexts — demonstrate that SETs do not reliably measure teaching effectiveness. What they often measure instead is the degree to which an instructor conforms to students' expectations, expectations shaped by the instructor's gender, race, ethnicity, language background, age, disability status, and sexual orientation. The consequences are not abstract. Faculty who are women, people of color, non-native English speakers, and members of other marginalized groups receive systematically lower evaluation scores and disproportionately more abusive comments — even when teaching identical courses with identical materials. These biased scores then follow them into personnel files, where small numerical differences can determine who is promoted and who is not.</P>
       <P>The Fair Feedback Project was created by Remi Kalir, PhD, in collaboration with Claude, as a practical resource that simultaneously demonstrates how generative AI may be responsibly used to advance pedagogical innovation. It was designed to address this problem at two levels. For individual instructors, it provides evidence-based, course-specific strategies and materials that can be implemented immediately. For centers for teaching and learning, department chairs, and administrators, it provides resources to support institutional reform of how student feedback is collected, interpreted, and used.</P>
       <P style={{ fontStyle: "italic", color: COLORS.slate600 }}>It is not a solution. It is a starting point.</P>
+      <BackToTop topRef={topRef} />
 
-      <H2>The research foundation</H2>
+      <SectionDivider id="about-research" color={COLORS.azure}>The research foundation</SectionDivider>
       <P>The design of The Fair Feedback Project is grounded in a substantial body of peer-reviewed scholarship. Rather than summarizing every study, we highlight the key findings that informed our approach.</P>
 
       <H3>The problem: bias in student evaluations</H3>
@@ -432,23 +522,24 @@ function AboutPage() {
       <P><Strong>Framing matters — and can backfire.</Strong> A study at the University of Girona tested debiasing videos and found that a video about implicit bias generally reduced the gender gap, but a video explicitly focused on gender bias caused male students to rate female instructors <Em>lower</Em> than the control group (Ayllón & Zamora, 2025). An Australian replication found that male and female students responded to bias messaging in opposite directions (Kim, Williams, Johnston, & Fan, 2024). These findings demonstrate that how a message is framed is as important as whether a message is delivered.</P>
       <P><Strong>Self-affirmation reduces bias through a different mechanism.</Strong> Belgian researchers found that having students complete a self-affirmation exercise before evaluations eliminated gender bias — but by reducing inflated ratings for male professors rather than raising ratings for female professors (Hoorens, Dekkers, & Deschrijver, 2021).</P>
       <P><Strong>Some interventions have shown null effects.</Strong> A study at selective liberal arts colleges found that neither modified evaluation questions nor delayed timing of evaluations reduced gender disparities in qualitative comments (Owen, De Bruin, & Wu, 2025). A biology department replication of Peterson et al. yielded variable results across subfields (Mitchem et al., 2025). These null findings are important: they indicate that messaging interventions are not universally effective and should not be treated as a standalone solution.</P>
+      <BackToTop topRef={topRef} />
 
-      <H2>An invitation to institutional action</H2>
+      <SectionDivider id="about-action" color={COLORS.azure}>An invitation to institutional action</SectionDivider>
       <P>If you are an instructor, staff at a center for teaching and learning or similar office, or an administrator, we want to be direct: the most impactful thing you can do is not to share The Fair Feedback Project with your colleagues, though we hope you will. The most impactful thing you can do is to change — within your respective sphere of influence — how your institution collects, interprets, and uses student evaluation data.</P>
       <P>The evidence supports several institutional reforms. Rename evaluation instruments to emphasize student feedback rather than teaching ratings (as Augsburg University and UNC Asheville have done). Redesign evaluation questions to focus on specific student experiences and learning rather than global judgments of instructor quality. Report distributions, medians, and trends rather than means, and never use small numerical differences between instructors as evidence of differential teaching quality. Restrict or redesign open-ended comment prompts, where bias and abuse are most concentrated. Adopt a holistic approach to teaching assessment that includes peer observation, teaching portfolios, and evidence of student learning alongside student feedback. And make explicit, in tenure and promotion guidelines, that raw SET scores should not be used as a primary or standalone metric of teaching effectiveness.</P>
       <P>Several institutions have already taken meaningful steps. In 2018, the University of Southern California stopped using student evaluations of teaching in tenure and promotion decisions, a change prompted by the provost's concern about documented bias against women and faculty of color. USC moved to a peer-review model of teaching assessment, in which peer evaluation is based on classroom observation and review of course materials, design, and assignments; faculty submit teaching reflection statements that describe how they use student feedback to improve instruction; and student evaluations were redesigned to focus on student engagement and responsibility rather than instructor ratings. Students are now asked about factors like hours dedicated to study, engagement outside class, and their own approaches to learning course material. As USC's UCAPT manual notes, student ratings and comments may be considered as indicators of student engagement, but the well-known limitations of those evaluations should be recognized. Hamilton College now requires departments to use multiple types of evidence in tenure and promotion decisions, and has explicitly prohibited using student feedback to compare faculty to one another. As Hamilton economist Ann Owen, who led the faculty committee on evaluation reform, has explained, the college can no longer conclude that one person is a better teacher than another based on more positive student feedback. Hamilton's Department Chair Handbook instructs chairs not to allow student evaluations to define good teaching exclusively, to corroborate numerical evaluations with written comments, to consider contextual issues such as class size and course level, and to discuss evidence of possible bias. At the departmental level, Hamilton's Sociology department has gone further, stating that student evaluations will be assessed within the broader gendered, racialized, and heteronormative context of the college.</P>
       <P>Beyond these individual examples, a broader movement to transform teaching evaluation is underway. In a comprehensive survey of over 20 institutions, Michael McCreary (2026) documents a growing consensus that traditional reliance on student evaluations is inadequate and that modern approaches must incorporate multiple dimensions of teaching effectiveness assessed through multiple sources of evidence — not just the student voice, but also the instructor's self-reflection and peer review. Institutions as varied as UCLA, the University of Oregon, the University of Colorado Boulder, Clemson, Boise State, and the University of Georgia have adopted or are piloting teaching quality frameworks that define effective teaching across four to seven dimensions, evaluated through portfolios of evidence rather than a single numerical score. McCreary identifies six stages of institutional change, from recognizing the problem to reaching a sustainable steady state, and notes that even minimal policy changes — such as requiring that peer observation be available to faculty who want it — can catalyze broader cultural shifts. For institutions just beginning this work, the TEval approach, the DeLTA project, and the 2025 publication <Em>Transforming College Teaching Evaluation</Em> (Austin et al.) provide particularly useful models and resources.</P>
       <P>The 2019 American Sociological Association Statement on Student Evaluations of Teaching, now endorsed by nearly two dozen scholarly organizations, provides an authoritative summary of the case for reform and concrete recommendations for institutions. We urge institutions to consult it.</P>
       <P>The Fair Feedback Project recognizes that reform is slow and uneven; nonetheless, instructors need support now. The project will have succeeded most fully if it contributes, even modestly, to making itself unnecessary.</P>
+      <BackToTop topRef={topRef} />
 
-      <Separator />
-
-      <H2>Selected references</H2>
+      <SectionDivider id="about-references" color={COLORS.azure}>Selected references</SectionDivider>
       <div style={{ fontSize: 14, lineHeight: 1.7, color: COLORS.textSecondary }}>
         {REFERENCES.map((ref, i) => (
           <p key={i} style={{ margin: "0 0 0.75rem", paddingLeft: "2rem", textIndent: "-2rem" }}>{ref}</p>
         ))}
       </div>
+      <BackToTop topRef={topRef} />
     </Prose>
   );
 }
@@ -482,35 +573,50 @@ const REFERENCES = [
 ];
 
 function PrinciplesPage() {
+  const topRef = useRef(null);
+
   return (
     <Prose>
+      <div ref={topRef} style={{ scrollMarginTop: 72 }} />
       <H1>Principles</H1>
       <P>The following five principles informed every design decision in The Fair Feedback Project. The principles are presented here not as abstract ideals but as commitments that carry practical consequences throughout the project — shaping what we recommend, what we caution against, and what we decline to promise.</P>
 
+      <SectionNavButtons sections={PRINCIPLES_SECTIONS} color={COLORS.green} colorLight={COLORS.greenLight} colorDark={COLORS.greenDark} />
+
+      <SectionDivider id="prin-structural" color={COLORS.green}>1. Bias is structural</SectionDivider>
       <H2>1. Bias in student evaluations is a structural problem, not an individual failing.</H2>
       <P>The research makes clear that bias in student evaluations of teaching is systemic — rooted in cultural stereotypes, institutional norms, and evaluation instrument design. Individual instructors did not create this problem and cannot be expected to solve it alone.</P>
       <P>The Fair Feedback Project provides individual-level strategies because they can be implemented immediately and the evidence suggests they can help. But it does so within an explicit framework that calls for institutional and policy-level reform. Every recommendation in the Instructor Track is accompanied by a clear acknowledgment that individual action is necessary but not sufficient, and the Institutional Track exists precisely to support the structural changes that the research calls for.</P>
       <P>We urge institutions to adopt the recommendations of the American Sociological Association's 2019 Statement on Student Evaluations of Teaching, endorsed by nearly two dozen scholarly organizations: use student evaluations as one component of a holistic assessment of teaching, not as a standalone metric; frame evaluation instruments as opportunities for student feedback rather than ratings of teaching effectiveness; and exercise caution in the use of evaluation data in personnel decisions.</P>
+      <BackToTop topRef={topRef} />
 
+      <SectionDivider id="prin-evidence" color={COLORS.green}>2. Evidence-based recommendations</SectionDivider>
       <H2>2. All recommendations are tied to specific research findings.</H2>
       <P>Every strategy, every piece of generated language, and every recommendation in The Fair Feedback Project is grounded in peer-reviewed scholarship. Where the evidence is strong, we say so. Where it is mixed, limited, or context-dependent, we say that too. We do not present contested findings as settled, and we do not extrapolate beyond what the data support.</P>
       <P>This commitment shapes the project in concrete ways. When the Instructor Track generates anti-bias language for evaluation preambles, it draws on the specific messaging approaches that Peterson et al. (2019), Genetin et al. (2022), and Boring and Philippe (2021) found to be effective — and it steers instructors away from the normative and explicitly gendered framing that Boring and Philippe (2021) and Ayllón and Zamora (2025) found to be ineffective or counterproductive. When the project describes the likely effects of a strategy, it reports the range of findings across studies, including null results such as Owen, De Bruin, and Wu (2025) and variable results such as Mitchem et al. (2025), rather than cherry-picking only the positive outcomes.</P>
       <P>Throughout the project, citations are provided so that university instructors, staff, and administrators can consult the original studies and make informed decisions for their own contexts.</P>
+      <BackToTop topRef={topRef} />
 
+      <SectionDivider id="prin-practice" color={COLORS.green}>3. Professional best practice</SectionDivider>
       <H2>3. The Fair Feedback Project is designed as a professional best practice, not an additional burden.</H2>
       <P>We are acutely aware that the faculty most likely to seek out this project are those most harmed by biased evaluations — women, faculty of color, non-native English speakers, and other marginalized instructors. We have designed the project so that engaging with it feels empowering rather than exhausting, and so that the labor of mitigating bias is framed as a shared professional responsibility rather than the individual burden of those most affected.</P>
       <P>This principle has several practical implications. The project is designed for use by all instructors, including those who may benefit from current evaluation practices. Bias mitigation is framed as something a thoughtful professional does — comparable to inclusive syllabus design or accessible course materials — not as a defensive measure taken by the structurally vulnerable. We encourage centers for teaching and learning and faculty leaders to promote The Fair Feedback Project broadly and to incorporate its resources into programming, faculty development workshops, and departmental conversations about evaluation practice, so that engagement with bias mitigation becomes part of the ordinary fabric of teaching rather than an act of individual self-protection.</P>
       <P>The project is also designed to respect peoples' time. An instructor should be able to generate useful, evidence-based materials in a single focused session. Depth is available for those who want it — the research base, the nuances of framing, the institutional resources — but it is never required to reach a practical outcome.</P>
+      <BackToTop topRef={topRef} />
 
+      <SectionDivider id="prin-limitations" color={COLORS.green}>4. Transparency about limitations</SectionDivider>
       <H2>4. Transparency about limitations is a feature, not a flaw.</H2>
       <P>The Fair Feedback Project cannot eliminate bias in student evaluations. We are direct about this because users deserve honesty, and because overpromising would ultimately undermine the credibility of the broader reform effort.</P>
       <P>Here is what the evidence supports and what it does not. Well-designed messaging interventions can meaningfully reduce bias in quantitative ratings for some instructors in some contexts. Effects vary by discipline, course level, student demographics, institutional culture, and the specific framing of the intervention. There is less evidence that messaging interventions reduce bias in qualitative comments, where abusive and prejudicial language is most prevalent (Owen, De Bruin, & Wu, 2025). Self-affirmation exercises have shown promise, but operate through a different mechanism — reducing inflated ratings for male professors rather than raising ratings for female professors (Hoorens, Dekkers, & Deschrijver, 2021). And no individual-level strategy can compensate for an institutional policy that treats raw evaluation scores as a reliable measure of teaching quality.</P>
       <P>We present these limitations not to discourage action but to calibrate expectations. An instructor who uses The Fair Feedback Project and sees modest improvement in their evaluations has achieved something real. An instructor who uses it and sees no change has not failed — they have encountered the limits of individual action against a structural problem, and that experience can itself become fuel for advocacy.</P>
+      <BackToTop topRef={topRef} />
 
+      <SectionDivider id="prin-nuance" color={COLORS.green}>5. Care and nuance</SectionDivider>
       <H2>5. Effective messaging requires care and nuance.</H2>
       <P>The intervention research reveals that the content and framing of anti-bias messaging is critical — and that well-intentioned but poorly designed interventions can do more harm than good. This principle governs the language The Fair Feedback Project generates and recommends.</P>
       <P>Three categories of findings inform our approach. First, <Strong>informational messages work better than normative ones.</Strong> Messages that describe how bias operates, share research findings, and invite students to reflect on their judgments have shown positive effects (Boring & Philippe, 2021; Genetin et al., 2022; Peterson et al., 2019). Messages that simply instruct students not to discriminate have generally been ineffective (Boring & Philippe, 2021). Second, <Strong>implicit-bias framing works better than explicit gender-bias framing.</Strong> A study testing debiasing videos found that a video about implicit bias generally reduced the gender gap in evaluations, but a video explicitly focused on gender bias triggered backlash — male students rated female instructors even lower than the control group (Ayllón & Zamora, 2025). Third, <Strong>the same message can affect different students differently.</Strong> An Australian replication found that male students responded to bias messaging by raising ratings of disadvantaged instructors, while female students responded by lowering ratings of advantaged instructors (Kim, Williams, Johnston, & Fan, 2024). The net effect was reduced disparity, but through divergent mechanisms.</P>
       <P>The Fair Feedback Project steers instructors toward messaging approaches that the evidence supports and away from approaches the evidence suggests are ineffective or counterproductive. We explain these choices throughout the project so that instructors understand not just what to say, but why — and so that they can make informed adaptations for their own contexts rather than treating any generated language as a script to be followed uncritically.</P>
+      <BackToTop topRef={topRef} />
     </Prose>
   );
 }
@@ -526,48 +632,12 @@ const FAQ_SECTIONS = [
 function FAQPage() {
   const faqTopRef = useRef(null);
 
-  const scrollTo = (id) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-  };
-
   return (
     <Prose>
       <div ref={faqTopRef} style={{ scrollMarginTop: 72 }} />
       <H1>Frequently asked questions</H1>
 
-      <div style={{
-        display: "flex",
-        flexWrap: "wrap",
-        gap: 8,
-        margin: "0 0 1rem",
-      }}>
-        {FAQ_SECTIONS.map((s) => (
-          <button
-            key={s.id}
-            onClick={() => scrollTo(s.id)}
-            style={{
-              background: COLORS.accentLight,
-              border: `1px solid transparent`,
-              borderRadius: 6,
-              padding: "6px 14px",
-              fontSize: 13,
-              color: COLORS.accentDark,
-              cursor: "pointer",
-              fontFamily: "'Source Sans 3', system-ui, sans-serif",
-              fontWeight: 500,
-              transition: "all 0.15s ease",
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.borderColor = COLORS.accent;
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.borderColor = "transparent";
-            }}
-          >
-            {s.label}
-          </button>
-        ))}
-      </div>
+      <SectionNavButtons sections={FAQ_SECTIONS} color={COLORS.accent} colorLight={COLORS.accentLight} colorDark={COLORS.accentDark} />
 
       <FAQSection id="faq-about">About The Fair Feedback Project</FAQSection>
       <FAQQuestion>What is The Fair Feedback Project?</FAQQuestion>
@@ -584,7 +654,7 @@ function FAQPage() {
       <FAQQuestion>Does The Fair Feedback Project collect any data?</FAQQuestion>
       <P>No. The Fair Feedback Project does not collect, store, or transmit any user data. Any information you voluntarily provide while using the Instructor Track — such as your discipline, course level, or class size — is used solely to generate your materials in real time. Nothing is saved, logged, or accessible to anyone after your session. There are no individual accounts, no analytics tracking individual usage, and no way for us or anyone else to connect generated materials back to a specific person or course.</P>
       <P>We made this a foundational design choice because instructors — particularly those most affected by evaluation bias — should be able to explore these resources without concern that doing so will be visible to their institution, documented in any system, or used for any purpose beyond their own.</P>
-      <BackToTop faqTopRef={faqTopRef} />
+      <BackToTop topRef={faqTopRef} />
 
       <FAQSection id="faq-design">Design decisions</FAQSection>
       <FAQQuestion>Why does the project use "implicit bias" framing rather than explicitly naming gender or racial bias?</FAQQuestion>
@@ -606,7 +676,7 @@ function FAQPage() {
       <FAQQuestion>How does the project account for differences across disciplines and institutional types?</FAQQuestion>
       <P>The Instructor Track asks about course-level contextual factors because the research identifies several variables that interact with evaluation bias. Evaluations in STEM fields tend to show different patterns than those in the humanities (Kreitzer & Sweet-Cushman, 2022). Large introductory courses present different challenges than small upper-level seminars. Required courses receive systematically different ratings than electives (Kogan, 2014). A department's gender composition shapes the role-congruity expectations that drive bias (Aragón, Pietri, & Powell, 2023).</P>
       <P>The project uses these inputs to tailor its recommendations — for example, adjusting the emphasis of generated language or flagging strategies that may be more or less effective in a given context. However, we are transparent that the intervention research has been conducted in a limited range of institutional and disciplinary settings. Most experimental studies have been conducted at large public universities in introductory-level courses. Generalization to other contexts — small colleges, graduate seminars, clinical settings, online programs — requires caution, and we note this wherever relevant.</P>
-      <BackToTop faqTopRef={faqTopRef} />
+      <BackToTop topRef={faqTopRef} />
 
       <FAQSection id="faq-implementation">Practical implementation</FAQSection>
       <FAQQuestion>When should I deploy an anti-bias statement?</FAQQuestion>
@@ -628,7 +698,7 @@ function FAQPage() {
       <P>The research supports a range of approaches, from a brief written statement to a substantive classroom discussion. A written preamble — delivered through the evaluation instrument, an email, or an LMS announcement — requires the least class time and most closely replicates the experimental conditions in the literature.</P>
       <P>However, some instructors may wish to go further. A growing number of faculty are incorporating discussions of evaluation bias into their courses, treating it as a teaching moment about critical thinking, research methods, or equity — topics that are already part of many curricula. This approach is consistent with the broader pedagogical case for transparency in teaching, and some practitioners have argued that it can be more impactful than a standalone written statement precisely because it engages students in active reflection rather than passive reading.</P>
       <P>If you choose to hold a classroom discussion, we recommend framing it around the research evidence rather than your personal experience. Students are more receptive to information about documented patterns across institutions than to a conversation that may feel like a plea for better ratings. The Instructor Track can generate a discussion guide tailored to your course context.</P>
-      <BackToTop faqTopRef={faqTopRef} />
+      <BackToTop topRef={faqTopRef} />
 
       <FAQSection id="faq-limitations">Limitations and honest expectations</FAQSection>
       <FAQQuestion>Will this fix bias in my evaluations?</FAQQuestion>
@@ -649,7 +719,7 @@ function FAQPage() {
       <FAQQuestion>The research has mostly been conducted at large public universities. Is it relevant to my context?</FAQQuestion>
       <P>Most of the experimental intervention studies — Peterson et al. (2019) at Iowa State, Genetin et al. (2022) at Ohio State, Boring and Philippe (2021) at a French university — were conducted in large introductory courses at research-intensive institutions. The Owen, De Bruin, and Wu (2025) study at liberal arts colleges is a notable exception, though it found null results for its specific interventions. The Kim et al. (2024) study was conducted at an Australian university. Ayllón and Zamora (2025) worked at the University of Girona in Spain.</P>
       <P>The underlying evidence on bias itself is broader — documented across institutional types, national contexts, disciplines, and course modalities. The question is whether the specific mitigation strategies tested in one context transfer to others. We think it is reasonable to expect that the general principles — informational framing, emphasis on high stakes, redirection toward course content — will be useful across contexts, but we cannot guarantee that effect sizes will be comparable. We note these limitations wherever relevant and encourage instructors to think of the generated materials as an evidence-informed starting point for their own context, not a guaranteed intervention.</P>
-      <BackToTop faqTopRef={faqTopRef} />
+      <BackToTop topRef={faqTopRef} />
 
       <FAQSection id="faq-institutional">Institutional use</FAQSection>
       <FAQQuestion>How can a center for teaching and learning use The Fair Feedback Project?</FAQQuestion>
@@ -664,7 +734,7 @@ function FAQPage() {
       <FAQQuestion>How should evaluation committees interpret SET data given what we know about bias?</FAQQuestion>
       <P>This is a question for institutions rather than individual instructors, but it is one of the most consequential applications of the research. Several evidence-based recommendations from the literature are worth highlighting.</P>
       <P>Look at distributions, not just means. Most faculty receive positively skewed evaluation scores, which means means are disproportionately influenced by negative outliers — a pattern that may itself be shaped by bias (Kreitzer & Sweet-Cushman, 2022). Medians and modal responses are more robust. Never treat small numerical differences as meaningful. Typical evaluation scores fall within a fraction of a point of one another. A difference between a 4.43 and a 4.60 on a five-point scale is not evidence of differential teaching quality — it is noise, and it may be bias-driven noise (Aragón, Pietri, & Powell, 2023). Consider contextual factors. Class size, course level, whether the course is required or elective, discipline, and time of day all influence evaluation scores independently of teaching quality (Kogan, 2014; Kreitzer & Sweet-Cushman, 2022). Committees should account for these factors rather than comparing raw scores across dissimilar courses. Corroborate with other evidence. Evaluation scores should be interpreted alongside peer observations, teaching portfolios, evidence of student learning, and the instructor's own reflective statement — not in isolation. Use student feedback formatively, not comparatively. Hamilton College's policy of prohibiting the use of student feedback to compare faculty to one another provides a useful model. Evaluation data can help an individual instructor understand and improve their practice without being weaponized as a ranking system.</P>
-      <BackToTop faqTopRef={faqTopRef} />
+      <BackToTop topRef={faqTopRef} />
     </Prose>
   );
 }
@@ -939,7 +1009,7 @@ function InstructorTrack({ onNav }) {
   const flags = step === 5 ? getContextFlags(ctx) : [];
 
   return (
-    <div style={{ maxWidth: 680, margin: "0 auto", padding: "3rem 2rem 5rem", fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>
+    <div style={{ maxWidth: 680, margin: "0 auto", padding: "3rem 1.25rem 5rem", fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>
 
       {step === 0 && (
         <div>
@@ -1110,10 +1180,16 @@ function StepNav({ step, canProceed, onBack, onNext, nextLabel }) {
 }
 
 function Footer() {
+  const linkStyle = {
+    color: COLORS.slate500,
+    textDecoration: "underline",
+    textUnderlineOffset: "2px",
+    transition: "color 0.15s ease",
+  };
   return (
     <footer style={{
       borderTop: `1px solid ${COLORS.slate200}`,
-      padding: "2rem",
+      padding: "2rem 1.25rem",
       textAlign: "center",
       fontSize: 13,
       color: COLORS.slate500,
@@ -1121,7 +1197,18 @@ function Footer() {
       lineHeight: 1.6,
     }}>
       <p style={{ margin: "0 0 4px" }}>The Fair Feedback Project — Created by Remi Kalir, PhD, in collaboration with Claude</p>
-      <p style={{ margin: 0 }}>An openly accessible, evidence-based resource. Not affiliated with any institution.</p>
+      <p style={{ margin: "0 0 4px" }}>An openly accessible, evidence-based resource. Not affiliated with any institution.</p>
+      <p style={{ margin: 0 }}>
+        <a href="https://forms.gle/m8JihbGLbq1SirLD9" target="_blank" rel="noopener noreferrer" style={linkStyle}
+          onMouseEnter={(e) => e.target.style.color = COLORS.accent}
+          onMouseLeave={(e) => e.target.style.color = COLORS.slate500}
+        >Share your feedback and suggestions</a>
+        <span style={{ margin: "0 8px" }}>|</span>
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" style={linkStyle}
+          onMouseEnter={(e) => e.target.style.color = COLORS.accent}
+          onMouseLeave={(e) => e.target.style.color = COLORS.slate500}
+        >CC BY-NC-SA 4.0</a>
+      </p>
     </footer>
   );
 }
