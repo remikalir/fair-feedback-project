@@ -189,6 +189,15 @@ function Landing({ onNav }) {
           }}>
             Before exploring the tracks, we recommend reading about the research and principles that guide this project.
           </p>
+	  <p style={{
+            fontSize: 14,
+            color: COLORS.slate500,
+            lineHeight: 1.7,
+            margin: "0 0 1.5rem",
+            fontFamily: "'Source Sans 3', system-ui, sans-serif",
+          }}>
+            Your privacy matters: The Fair Feedback Project does not collect, store, or transmit any of your data, ever.
+          </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             {["about", "principles", "faq"].map((id) => (
               <button
@@ -606,7 +615,7 @@ function PrinciplesPage() {
 
       <SectionDivider id="prin-limitations" color={COLORS.green}>4. Transparency about limitations</SectionDivider>
       <H2>4. Transparency about limitations is a feature, not a flaw.</H2>
-      <P>The Fair Feedback Project cannot eliminate bias in student evaluations. We are direct about this because users deserve honesty, and because overpromising would ultimately undermine the credibility of the broader reform effort.</P>
+      <P>The Fair Feedback Project cannot eliminate bias in student evaluations. We are direct about this because instructors deserve honesty, and because overpromising would ultimately undermine the credibility of the broader reform effort.</P>
       <P>Here is what the evidence supports and what it does not. Well-designed messaging interventions can meaningfully reduce bias in quantitative ratings for some instructors in some contexts. Effects vary by discipline, course level, student demographics, institutional culture, and the specific framing of the intervention. There is less evidence that messaging interventions reduce bias in qualitative comments, where abusive and prejudicial language is most prevalent (Owen, De Bruin, & Wu, 2025). Self-affirmation exercises have shown promise, but operate through a different mechanism — reducing inflated ratings for male professors rather than raising ratings for female professors (Hoorens, Dekkers, & Deschrijver, 2021). And no individual-level strategy can compensate for an institutional policy that treats raw evaluation scores as a reliable measure of teaching quality.</P>
       <P>We present these limitations not to discourage action but to calibrate expectations. An instructor who uses The Fair Feedback Project and sees modest improvement in their evaluations has achieved something real. An instructor who uses it and sees no change has not failed — they have encountered the limits of individual action against a structural problem, and that experience can itself become fuel for advocacy.</P>
       <BackToTop topRef={topRef} />
