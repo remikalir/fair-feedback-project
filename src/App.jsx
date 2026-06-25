@@ -1003,7 +1003,7 @@ function InstructorTrack({ onNav }) {
   const canProceed = () => {
     if (step === 1) return deployment.length > 0;
     if (step === 2) return discipline && level && size;
-    if (step === 3) return canModify && hasExisting;
+    if (step === 3) return canModify || hasExisting;
     if (step === 4) return scope;
     return true;
   };
@@ -1100,7 +1100,7 @@ function InstructorTrack({ onNav }) {
             { value: "no", label: "No" },
             { value: "unsure", label: "I'm not sure" },
           ]} />
-          <StepNav step={3} canProceed={canProceed()} onBack={() => setStep(2)} onNext={() => setStep(4)} />
+          <StepNav step={3} canProceed={canProceed()} onBack={() => setStep(2)} onNext={() => setStep(4)} hint="Please answer at least one question to continue." />
         </div>
       )}
 
@@ -1173,17 +1173,22 @@ function StepHeader({ step, total, title }) {
   );
 }
 
-function StepNav({ step, canProceed, onBack, onNext, nextLabel }) {
+function StepNav({ step, canProceed, onBack, onNext, nextLabel, hint }) {
   return (
-    <div style={{ display: "flex", justifyContent: "space-between", margin: "2rem 0 0" }}>
-      <button onClick={onBack} style={{ background: "none", border: `1px solid ${COLORS.slate200}`, borderRadius: 6, padding: "8px 20px", fontSize: 14, color: COLORS.slate700, cursor: "pointer", fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>Back</button>
-      <button onClick={onNext} disabled={!canProceed} style={{
-        background: canProceed ? COLORS.accent : COLORS.slate200,
-        color: canProceed ? COLORS.white : COLORS.slate400,
-        border: "none", borderRadius: 6, padding: "8px 24px", fontSize: 14, fontWeight: 500,
-        cursor: canProceed ? "pointer" : "default", fontFamily: "'Source Sans 3', system-ui, sans-serif",
-        transition: "all 0.15s",
-      }}>{nextLabel || "Continue"}</button>
+    <div style={{ margin: "2rem 0 0" }}>
+      {hint && !canProceed && (
+        <p aria-live="polite" style={{ margin: "0 0 0.75rem", fontSize: 14, color: COLORS.slate600, textAlign: "right", fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>{hint}</p>
+      )}
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <button onClick={onBack} style={{ background: "none", border: `1px solid ${COLORS.slate200}`, borderRadius: 6, padding: "8px 20px", fontSize: 14, color: COLORS.slate700, cursor: "pointer", fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>Back</button>
+        <button onClick={onNext} disabled={!canProceed} style={{
+          background: canProceed ? COLORS.accent : COLORS.slate200,
+          color: canProceed ? COLORS.white : COLORS.slate400,
+          border: "none", borderRadius: 6, padding: "8px 24px", fontSize: 14, fontWeight: 500,
+          cursor: canProceed ? "pointer" : "default", fontFamily: "'Source Sans 3', system-ui, sans-serif",
+          transition: "all 0.15s",
+        }}>{nextLabel || "Continue"}</button>
+      </div>
     </div>
   );
 }
