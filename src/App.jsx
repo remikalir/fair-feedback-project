@@ -531,6 +531,7 @@ const ABOUT_SECTIONS = [
   { id: "about-why", label: "Why this project" },
   { id: "about-research", label: "The research" },
   { id: "about-action", label: "Invitation to action" },
+  { id: "about-accessibility", label: "Accessibility" },
   { id: "about-references", label: "Selected references" },
 ];
 
@@ -585,6 +586,11 @@ function AboutPage() {
       <P>Beyond these individual examples, a broader movement to transform teaching evaluation is underway. In a comprehensive survey of over 20 institutions, Michael McCreary (2026) documents a growing consensus that traditional reliance on student evaluations is inadequate and that modern approaches must incorporate multiple dimensions of teaching effectiveness assessed through multiple sources of evidence — not just the student voice, but also the instructor's self-reflection and peer review. Institutions as varied as UCLA, the University of Oregon, the University of Colorado Boulder, Clemson, Boise State, and the University of Georgia have adopted or are piloting teaching quality frameworks that define effective teaching across four to seven dimensions, evaluated through portfolios of evidence rather than a single numerical score. McCreary identifies six stages of institutional change, from recognizing the problem to reaching a sustainable steady state, and notes that even minimal policy changes — such as requiring that peer observation be available to faculty who want it — can catalyze broader cultural shifts. For institutions just beginning this work, the TEval approach, the DeLTA project, and the 2025 publication <Em>Transforming College Teaching Evaluation</Em> (Austin et al.) provide particularly useful models and resources.</P>
       <P>The 2019 American Sociological Association Statement on Student Evaluations of Teaching, now endorsed by nearly two dozen scholarly organizations, provides an authoritative summary of the case for reform and concrete recommendations for institutions. We urge institutions to consult it.</P>
       <P>The Fair Feedback Project recognizes that reform is slow and uneven; nonetheless, instructors need support now. The project will have succeeded most fully if it contributes, even modestly, to making itself unnecessary.</P>
+      <BackToTop topRef={topRef} />
+
+      <SectionDivider id="about-accessibility" color={COLORS.azure}>Accessibility</SectionDivider>
+      <P>The Fair Feedback Project is designed for use by everyone, including instructors who rely on assistive technology. This project site has been audited against WCAG 2.1 Level AA — the international standard for digital accessibility — and revised to meet it (audit completed in June, 2026). This accessibility audit was conducted in collaboration with Claude (Opus 4.8), consistent with how the overall project was built. Practically, that means every interactive element can be reached and operated by keyboard; the question flows in the Instructor Track are structured so screen readers announce them clearly; focus moves sensibly as you navigate; generated materials and status messages are announced rather than appearing silently; and text meets contrast and readability guidelines.</P>
+      <P>In keeping with this project's commitment to transparency, we describe this as an aim we work toward, not a guarantee. Accessibility standards evolve, assistive technologies vary, and no audit catches everything. If you encounter a barrier — anything that makes the site harder to use than it should be — please tell us through the feedback form (link below in the footer), and we will work to fix it.</P>
       <BackToTop topRef={topRef} />
 
       <SectionDivider id="about-references" color={COLORS.azure}>Selected references</SectionDivider>
