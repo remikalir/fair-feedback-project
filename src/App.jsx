@@ -1,10 +1,10 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useId } from "react";
 
 const COLORS = {
   slate900: "#2d3436",
   slate700: "#4a5568",
   slate600: "#636e72",
-  slate500: "#718096",
+  slate500: "#69727f",
   slate400: "#a0aab4",
   slate200: "#e2e8f0",
   slate100: "#f1f3f5",
@@ -22,6 +22,19 @@ const COLORS = {
   textSecondary: "#636e72",
   bg: "#faf9f7",
   white: "#ffffff",
+};
+
+// Visually hidden but available to assistive tech (for live-region announcements).
+const SR_ONLY = {
+  position: "absolute",
+  width: 1,
+  height: 1,
+  padding: 0,
+  margin: -1,
+  overflow: "hidden",
+  clip: "rect(0, 0, 0, 0)",
+  whiteSpace: "nowrap",
+  border: 0,
 };
 
 const NAV_ITEMS = [
@@ -236,65 +249,97 @@ function Landing({ onNav }) {
 function TrackCard({ label, title, description, action, accent, accentBg, onClick }) {
   const [hovered, setHovered] = useState(false);
   const clickable = !!onClick;
+
+  const cardStyle = {
+    background: COLORS.white,
+    border: `1px solid ${hovered ? accent : COLORS.slate200}`,
+    borderRadius: 10,
+    padding: "2rem 1.75rem",
+    cursor: clickable ? "pointer" : "default",
+    transition: "border-color 0.2s ease",
+    display: "flex",
+    flexDirection: "column",
+    width: "100%",
+    textAlign: "left",
+    font: "inherit",
+    color: "inherit",
+  };
+
+  const badge = (
+    <span style={{
+      display: "inline-block",
+      fontSize: 12,
+      fontWeight: 500,
+      color: accent,
+      background: accentBg,
+      padding: "3px 10px",
+      borderRadius: 4,
+      marginBottom: 14,
+      alignSelf: "flex-start",
+      fontFamily: "'Source Sans 3', system-ui, sans-serif",
+      textTransform: "uppercase",
+      letterSpacing: "0.04em",
+    }}>
+      {label}
+    </span>
+  );
+
+  const titleStyle = {
+    fontFamily: "'Source Serif 4', Georgia, serif",
+    fontSize: 22,
+    fontWeight: 600,
+    color: COLORS.slate900,
+    margin: "0 0 10px",
+  };
+
+  const descStyle = {
+    fontSize: 14.5,
+    color: COLORS.slate600,
+    lineHeight: 1.65,
+    margin: "0 0 1.5rem",
+    flex: 1,
+    fontFamily: "'Source Sans 3', system-ui, sans-serif",
+  };
+
+  const actionStyle = {
+    fontSize: 13,
+    color: COLORS.slate600,
+    fontStyle: "italic",
+    fontFamily: "'Source Sans 3', system-ui, sans-serif",
+  };
+
+  // Clickable card renders as a native <button>. Its content is phrasing-only
+  // (spans, not <h2>/<p>) so the markup is valid inside a button, and an
+  // explicit aria-label keeps the accessible name concise.
+  if (clickable) {
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        aria-label={`${title} — ${action}`}
+        style={cardStyle}
+      >
+        {badge}
+        <span style={{ ...titleStyle, display: "block" }}>{title}</span>
+        <span style={{ ...descStyle, display: "block" }}>{description}</span>
+        <span style={actionStyle}>{action}</span>
+      </button>
+    );
+  }
+
+  // Non-interactive card keeps a real heading for the document outline.
   return (
     <div
-      onClick={onClick}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      style={{
-        background: COLORS.white,
-        border: `1px solid ${hovered ? accent : COLORS.slate200}`,
-        borderRadius: 10,
-        padding: "2rem 1.75rem",
-        cursor: clickable ? "pointer" : "default",
-        transition: "border-color 0.2s ease",
-        display: "flex",
-        flexDirection: "column",
-      }}
+      style={cardStyle}
     >
-      <span style={{
-        display: "inline-block",
-        fontSize: 12,
-        fontWeight: 500,
-        color: accent,
-        background: accentBg,
-        padding: "3px 10px",
-        borderRadius: 4,
-        marginBottom: 14,
-        alignSelf: "flex-start",
-        fontFamily: "'Source Sans 3', system-ui, sans-serif",
-        textTransform: "uppercase",
-        letterSpacing: "0.04em",
-      }}>
-        {label}
-      </span>
-      <h2 style={{
-        fontFamily: "'Source Serif 4', Georgia, serif",
-        fontSize: 22,
-        fontWeight: 600,
-        color: COLORS.slate900,
-        margin: "0 0 10px",
-      }}>
-        {title}
-      </h2>
-      <p style={{
-        fontSize: 14.5,
-        color: COLORS.slate600,
-        lineHeight: 1.65,
-        margin: "0 0 1.5rem",
-        flex: 1,
-        fontFamily: "'Source Sans 3', system-ui, sans-serif",
-      }}>
-        {description}
-      </p>
-      <span style={{
-        fontSize: 13,
-        color: COLORS.slate400,
-        fontStyle: "italic",
-        fontFamily: "'Source Sans 3', system-ui, sans-serif",
-      }}>
-        {action}
-      </span>
+      {badge}
+      <h2 style={titleStyle}>{title}</h2>
+      <p style={descStyle}>{description}</p>
+      <span style={actionStyle}>{action}</span>
     </div>
   );
 }
@@ -917,12 +962,35 @@ function getContextFlags(ctx) {
 
 function OutputBlock({ title, text, evidence, accent }) {
   const [copied, setCopied] = useState(false);
-  const copy = () => {
-    navigator.clipboard.writeText(text).then(() => {
+  const [copyFailed, setCopyFailed] = useState(false);
+  const copy = async () => {
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        // Fallback for insecure contexts / in-app browsers without the Clipboard API.
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.setAttribute("readonly", "");
+        ta.style.position = "fixed";
+        ta.style.left = "-9999px";
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        const ok = document.execCommand("copy");
+        document.body.removeChild(ta);
+        if (!ok) throw new Error("execCommand copy failed");
+      }
+      setCopyFailed(false);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    });
+    } catch {
+      setCopied(false);
+      setCopyFailed(true);
+      setTimeout(() => setCopyFailed(false), 5000);
+    }
   };
+  const buttonLabel = copied ? "Copied" : copyFailed ? "Press Ctrl/⌘ + C" : "Copy text";
   return (
     <div style={{ margin: "0 0 2rem" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", margin: "0 0 8px" }}>
@@ -933,32 +1001,43 @@ function OutputBlock({ title, text, evidence, accent }) {
           borderRadius: 6, padding: "5px 14px", fontSize: 13, cursor: "pointer",
           color: copied ? COLORS.greenDark : COLORS.slate600,
           fontFamily: "'Source Sans 3', system-ui, sans-serif", transition: "all 0.15s",
-        }}>{copied ? "Copied" : "Copy text"}</button>
+        }}>{buttonLabel}</button>
       </div>
       <div style={{
         background: COLORS.white, border: `1px solid ${COLORS.slate200}`, borderRadius: 8,
         padding: "1.25rem 1.5rem", fontSize: 14.5, lineHeight: 1.7, color: COLORS.text,
         whiteSpace: "pre-wrap", fontFamily: "'Source Sans 3', system-ui, sans-serif",
       }}>{text}</div>
+      {copyFailed && (
+        <p style={{ fontSize: 13, color: COLORS.slate600, lineHeight: 1.6, margin: "8px 0 0" }}>
+          Copying isn't available in this browser. Select the text above and press Ctrl + C (or ⌘ + C) to copy it.
+        </p>
+      )}
+      <span aria-live="polite" style={SR_ONLY}>
+        {copied ? "Copied to clipboard." : copyFailed ? "Copying isn't available in this browser. Select the text and press Control or Command plus C." : ""}
+      </span>
       <p style={{ fontSize: 13, color: COLORS.slate500, lineHeight: 1.6, margin: "8px 0 0", fontStyle: "italic" }}>{evidence}</p>
     </div>
   );
 }
 
 function RadioGroup({ label, options, value, onChange }) {
+  const groupName = useId();
   return (
-    <div style={{ margin: "0 0 1.5rem" }}>
-      <label style={{ display: "block", fontSize: 15, fontWeight: 500, color: COLORS.slate900, margin: "0 0 8px", fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>{label}</label>
+    <fieldset style={{ margin: "0 0 1.5rem", border: "none", padding: 0, minInlineSize: "auto" }}>
+      {label && (
+        <legend style={{ display: "block", fontSize: 15, fontWeight: 500, color: COLORS.slate900, margin: "0 0 8px", padding: 0, fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>{label}</legend>
+      )}
       <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
         {options.map(opt => (
           <label key={opt.value} style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: "pointer", fontSize: 14.5, color: COLORS.slate700, lineHeight: 1.5, padding: "4px 0" }}>
-            <input type="radio" name={label} checked={value === opt.value} onChange={() => onChange(opt.value)}
+            <input type="radio" name={groupName} checked={value === opt.value} onChange={() => onChange(opt.value)}
               style={{ marginTop: 3, accentColor: COLORS.accent }} />
             <span>{opt.label}</span>
           </label>
         ))}
       </div>
-    </div>
+    </fieldset>
   );
 }
 
@@ -972,8 +1051,10 @@ function CheckGroup({ label, options, values, onChange }) {
     onChange(next);
   };
   return (
-    <div style={{ margin: "0 0 1.5rem" }}>
-      <label style={{ display: "block", fontSize: 15, fontWeight: 500, color: COLORS.slate900, margin: "0 0 8px", fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>{label}</label>
+    <fieldset style={{ margin: "0 0 1.5rem", border: "none", padding: 0, minInlineSize: "auto" }}>
+      {label && (
+        <legend style={{ display: "block", fontSize: 15, fontWeight: 500, color: COLORS.slate900, margin: "0 0 8px", padding: 0, fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>{label}</legend>
+      )}
       <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
         {options.map(opt => (
           <label key={opt.value} style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: "pointer", fontSize: 14.5, color: COLORS.slate700, lineHeight: 1.5, padding: "4px 0" }}>
@@ -983,7 +1064,7 @@ function CheckGroup({ label, options, values, onChange }) {
           </label>
         ))}
       </div>
-    </div>
+    </fieldset>
   );
 }
 
@@ -999,6 +1080,19 @@ function InstructorTrack({ onNav }) {
   const [canModify, setCanModify] = useState("");
   const [hasExisting, setHasExisting] = useState("");
   const [scope, setScope] = useState("");
+
+  // Move focus to the active step's heading on each step change so keyboard and
+  // screen-reader users are taken to the new content. Skip the initial mount —
+  // focus is already moved to <main> by the page-level navigation handler.
+  const headingRef = useRef(null);
+  const firstStepRender = useRef(true);
+  useEffect(() => {
+    if (firstStepRender.current) {
+      firstStepRender.current = false;
+      return;
+    }
+    headingRef.current?.focus();
+  }, [step]);
 
   const canProceed = () => {
     if (step === 1) return deployment.length > 0;
@@ -1023,7 +1117,7 @@ function InstructorTrack({ onNav }) {
       {step === 0 && (
         <div>
           <span style={{ display: "inline-block", fontSize: 12, fontWeight: 500, color: COLORS.accent, background: COLORS.accentLight, padding: "3px 10px", borderRadius: 4, marginBottom: 16, textTransform: "uppercase", letterSpacing: "0.04em" }}>Instructor Track</span>
-          <h1 style={{ fontFamily: "'Source Serif 4', Georgia, serif", fontSize: 30, fontWeight: 600, color: COLORS.slate900, margin: "0 0 1rem", lineHeight: 1.2 }}>Generate evidence-based materials</h1>
+          <h1 ref={headingRef} tabIndex={-1} style={{ fontFamily: "'Source Serif 4', Georgia, serif", fontSize: 30, fontWeight: 600, color: COLORS.slate900, margin: "0 0 1rem", lineHeight: 1.2, outline: "none" }}>Generate evidence-based materials</h1>
           <p style={{ fontSize: 16, color: COLORS.slate600, lineHeight: 1.7, margin: "0 0 1rem" }}>The Instructor Track helps you generate evidence-based materials to promote fairer student evaluations in your courses. You'll answer a few questions about your course and how you'd like to use these materials. The process takes about two minutes.</p>
           <p style={{ fontSize: 14, color: COLORS.slate500, lineHeight: 1.6, margin: "0 0 2rem" }}>Nothing you enter is saved, logged, or transmitted. All materials are generated in your browser and exist only in your session.</p>
           <button onClick={() => setStep(1)} style={{ background: COLORS.accent, color: COLORS.white, border: "none", borderRadius: 8, padding: "12px 28px", fontSize: 15, fontWeight: 500, cursor: "pointer", fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>Get started</button>
@@ -1032,7 +1126,7 @@ function InstructorTrack({ onNav }) {
 
       {step === 1 && (
         <div>
-          <StepHeader step={1} total={4} title="How do you plan to use these materials?" />
+          <StepHeader step={1} total={4} title="How do you plan to use these materials?" headingRef={headingRef} />
           <CheckGroup label="" options={[
             { value: "preamble", label: "As introductory language for the course evaluation instrument" },
             { value: "script", label: "As a script or talking points for an in-class conversation before evaluations" },
@@ -1045,7 +1139,7 @@ function InstructorTrack({ onNav }) {
 
       {step === 2 && (
         <div>
-          <StepHeader step={2} total={4} title="Tell us about your course" />
+          <StepHeader step={2} total={4} title="Tell us about your course" headingRef={headingRef} />
           <RadioGroup label="Discipline area" value={discipline} onChange={setDiscipline} options={[
             { value: "stem", label: "STEM (science, technology, engineering, mathematics)" },
             { value: "social_sciences", label: "Social sciences" },
@@ -1066,11 +1160,11 @@ function InstructorTrack({ onNav }) {
             { value: "large", label: "Large (76–150 students)" },
             { value: "very_large", label: "Very large (more than 150 students)" },
           ]} />
-          <button onClick={() => setShowExtra(!showExtra)} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 14, color: COLORS.accent, padding: "4px 0", margin: "0 0 1rem", fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>
+          <button onClick={() => setShowExtra(!showExtra)} aria-expanded={showExtra} aria-controls="course-extra-detail" style={{ background: "none", border: "none", cursor: "pointer", fontSize: 14, color: COLORS.accent, padding: "4px 0", margin: "0 0 1rem", fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>
             {showExtra ? "Hide additional detail" : "Add more detail about your course"}
           </button>
           {showExtra && (
-            <div style={{ borderLeft: `2px solid ${COLORS.accentLight}`, paddingLeft: 20, margin: "0 0 1rem" }}>
+            <div id="course-extra-detail" style={{ borderLeft: `2px solid ${COLORS.accentLight}`, paddingLeft: 20, margin: "0 0 1rem" }}>
               <RadioGroup label="Modality" value={modality} onChange={setModality} options={[
                 { value: "in_person", label: "In-person" },
                 { value: "online", label: "Online (synchronous or asynchronous)" },
@@ -1083,13 +1177,13 @@ function InstructorTrack({ onNav }) {
               ]} />
             </div>
           )}
-          <StepNav step={2} canProceed={canProceed()} onBack={() => setStep(1)} onNext={() => setStep(3)} />
+          <StepNav step={2} canProceed={canProceed()} onBack={() => setStep(1)} onNext={() => setStep(3)} hint="Please answer all three questions to continue." />
         </div>
       )}
 
       {step === 3 && (
         <div>
-          <StepHeader step={3} total={4} title="Your institutional context" />
+          <StepHeader step={3} total={4} title="Your institutional context" headingRef={headingRef} />
           <RadioGroup label="Can you include custom introductory language in your course evaluation instrument?" value={canModify} onChange={setCanModify} options={[
             { value: "yes", label: "Yes" },
             { value: "no", label: "No" },
@@ -1106,7 +1200,7 @@ function InstructorTrack({ onNav }) {
 
       {step === 4 && (
         <div>
-          <StepHeader step={4} total={4} title="What would you like to generate?" />
+          <StepHeader step={4} total={4} title="What would you like to generate?" headingRef={headingRef} />
           <RadioGroup label="" value={scope} onChange={setScope} options={[
             { value: "focused", label: "Just the anti-bias statement — focused and ready to use" },
             { value: "broad", label: "A broader set of strategies — the statement plus a discussion guide, a self-affirmation prompt, and guidance on contextualizing your evaluations" },
@@ -1118,7 +1212,7 @@ function InstructorTrack({ onNav }) {
       {step === 5 && (
         <div>
           <span style={{ display: "inline-block", fontSize: 12, fontWeight: 500, color: COLORS.accent, background: COLORS.accentLight, padding: "3px 10px", borderRadius: 4, marginBottom: 16, textTransform: "uppercase", letterSpacing: "0.04em" }}>Your materials</span>
-          <h1 style={{ fontFamily: "'Source Serif 4', Georgia, serif", fontSize: 28, fontWeight: 600, color: COLORS.slate900, margin: "0 0 1rem", lineHeight: 1.25 }}>Generated materials</h1>
+          <h1 ref={headingRef} tabIndex={-1} style={{ fontFamily: "'Source Serif 4', Georgia, serif", fontSize: 28, fontWeight: 600, color: COLORS.slate900, margin: "0 0 1rem", lineHeight: 1.25, outline: "none" }}>Generated materials</h1>
           <p style={{ fontSize: 15, color: COLORS.slate600, lineHeight: 1.65, margin: "0 0 1.5rem" }}>Below are your evidence-based materials, tailored to your course context. Each includes the text you can use directly, along with the research basis for the approach. Use the copy button to grab any section.</p>
 
           {flags.length > 0 && (
@@ -1164,21 +1258,35 @@ function InstructorTrack({ onNav }) {
   );
 }
 
-function StepHeader({ step, total, title }) {
+function StepHeader({ step, total, title, headingRef }) {
   return (
     <div style={{ margin: "0 0 1.5rem" }}>
       <p style={{ fontSize: 13, color: COLORS.slate500, margin: "0 0 6px" }}>Step {step} of {total}</p>
-      <h2 style={{ fontFamily: "'Source Serif 4', Georgia, serif", fontSize: 22, fontWeight: 600, color: COLORS.slate900, margin: 0, lineHeight: 1.3 }}>{title}</h2>
+      <h1 ref={headingRef} tabIndex={-1} style={{ fontFamily: "'Source Serif 4', Georgia, serif", fontSize: 22, fontWeight: 600, color: COLORS.slate900, margin: 0, lineHeight: 1.3, outline: "none" }}>{title}</h1>
     </div>
   );
 }
 
 function StepNav({ step, canProceed, onBack, onNext, nextLabel, hint }) {
+  const showHint = hint && !canProceed;
   return (
     <div style={{ margin: "2rem 0 0" }}>
-      {hint && !canProceed && (
-        <p aria-live="polite" style={{ margin: "0 0 0.75rem", fontSize: 14, color: COLORS.slate600, textAlign: "right", fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>{hint}</p>
-      )}
+      {/* Persistent live region: always in the DOM so screen readers reliably
+          announce when the hint text appears. Collapses to zero height when empty. */}
+      <p
+        aria-live="polite"
+        style={{
+          margin: showHint ? "0 0 0.75rem" : 0,
+          height: showHint ? "auto" : 0,
+          overflow: "hidden",
+          fontSize: 14,
+          color: COLORS.slate600,
+          textAlign: "right",
+          fontFamily: "'Source Sans 3', system-ui, sans-serif",
+        }}
+      >
+        {showHint ? hint : ""}
+      </p>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <button onClick={onBack} style={{ background: "none", border: `1px solid ${COLORS.slate200}`, borderRadius: 6, padding: "8px 20px", fontSize: 14, color: COLORS.slate700, cursor: "pointer", fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>Back</button>
         <button onClick={onNext} disabled={!canProceed} style={{
@@ -1227,24 +1335,81 @@ function Footer() {
   );
 }
 
+function SkipLink() {
+  const [focused, setFocused] = useState(false);
+  return (
+    <a
+      href="#main-content"
+      onFocus={() => setFocused(true)}
+      onBlur={() => setFocused(false)}
+      style={{
+        position: "absolute",
+        left: focused ? 12 : -9999,
+        top: focused ? 12 : "auto",
+        zIndex: 200,
+        background: COLORS.white,
+        color: COLORS.accentDark,
+        border: `1px solid ${COLORS.accent}`,
+        borderRadius: 6,
+        padding: "8px 16px",
+        fontSize: 14,
+        fontWeight: 500,
+        fontFamily: "'Source Sans 3', system-ui, sans-serif",
+        textDecoration: "none",
+      }}
+    >
+      Skip to main content
+    </a>
+  );
+}
+
+const PAGE_TITLES = {
+  home: "The Fair Feedback Project",
+  about: "About — The Fair Feedback Project",
+  principles: "Principles — The Fair Feedback Project",
+  faq: "Frequently Asked Questions — The Fair Feedback Project",
+  instructor: "Instructor Track — The Fair Feedback Project",
+};
+
 export default function App() {
   const [page, setPage] = useState("home");
   const topRef = useRef(null);
+  const mainRef = useRef(null);
+  const firstPageRender = useRef(true);
 
   const navigate = (id) => {
     setPage(id);
     topRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  // Keep the document title in sync with the current view (WCAG 2.4.2).
+  useEffect(() => {
+    document.title = PAGE_TITLES[page] || PAGE_TITLES.home;
+  }, [page]);
+
+  // On view change (but not initial load), move focus into the main region so
+  // keyboard and screen-reader users are taken to the new content. preventScroll
+  // keeps the existing smooth-scroll-to-top from being overridden.
+  useEffect(() => {
+    if (firstPageRender.current) {
+      firstPageRender.current = false;
+      return;
+    }
+    mainRef.current?.focus({ preventScroll: true });
+  }, [page]);
+
   return (
     <div ref={topRef} style={{ background: COLORS.bg, minHeight: "100vh", fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>
       <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,500;0,600;1,400&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+      <SkipLink />
       <Nav current={page} onNav={navigate} />
-      {page === "home" && <Landing onNav={navigate} />}
-      {page === "about" && <AboutPage />}
-      {page === "principles" && <PrinciplesPage />}
-      {page === "faq" && <FAQPage />}
-      {page === "instructor" && <InstructorTrack onNav={navigate} />}
+      <main id="main-content" ref={mainRef} tabIndex={-1} style={{ outline: "none" }}>
+        {page === "home" && <Landing onNav={navigate} />}
+        {page === "about" && <AboutPage />}
+        {page === "principles" && <PrinciplesPage />}
+        {page === "faq" && <FAQPage />}
+        {page === "instructor" && <InstructorTrack onNav={navigate} />}
+      </main>
       <Footer />
     </div>
   );
