@@ -37,6 +37,14 @@ const SR_ONLY = {
   border: 0,
 };
 
+// Scroll to an element, honoring the user's reduced-motion preference (B8).
+function scrollToElement(el) {
+  if (!el) return;
+  const reduce = typeof window !== "undefined" && window.matchMedia
+    && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  el.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
+}
+
 const NAV_ITEMS = [
   { id: "home", label: "Home" },
   { id: "about", label: "About" },
@@ -452,7 +460,7 @@ function BackToTop({ topRef }) {
   return (
     <div style={{ margin: "1.5rem 0 0", textAlign: "right" }}>
       <button
-        onClick={() => topRef.current?.scrollIntoView({ behavior: "smooth" })}
+        onClick={() => scrollToElement(topRef.current)}
         style={{
           background: "none",
           border: "none",
@@ -473,7 +481,7 @@ function BackToTop({ topRef }) {
 
 function SectionNavButtons({ sections, color, colorLight, colorDark }) {
   const scrollTo = (id) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    scrollToElement(document.getElementById(id));
   };
   return (
     <div style={{
@@ -1036,7 +1044,7 @@ function RadioGroup({ label, options, value, onChange }) {
       )}
       <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
         {options.map(opt => (
-          <label key={opt.value} style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: "pointer", fontSize: 14.5, color: COLORS.slate700, lineHeight: 1.5, padding: "4px 0" }}>
+          <label key={opt.value} style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: "pointer", fontSize: 14.5, color: COLORS.slate700, lineHeight: 1.5, padding: "8px 0", minHeight: 40, boxSizing: "border-box" }}>
             <input type="radio" name={groupName} checked={value === opt.value} onChange={() => onChange(opt.value)}
               style={{ marginTop: 3, accentColor: COLORS.accent }} />
             <span>{opt.label}</span>
@@ -1063,7 +1071,7 @@ function CheckGroup({ label, options, values, onChange }) {
       )}
       <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
         {options.map(opt => (
-          <label key={opt.value} style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: "pointer", fontSize: 14.5, color: COLORS.slate700, lineHeight: 1.5, padding: "4px 0" }}>
+          <label key={opt.value} style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: "pointer", fontSize: 14.5, color: COLORS.slate700, lineHeight: 1.5, padding: "8px 0", minHeight: 40, boxSizing: "border-box" }}>
             <input type="checkbox" checked={values.includes(opt.value)} onChange={() => toggle(opt.value)}
               style={{ marginTop: 3, accentColor: COLORS.accent }} />
             <span>{opt.label}</span>
@@ -1385,7 +1393,7 @@ export default function App() {
 
   const navigate = (id) => {
     setPage(id);
-    topRef.current?.scrollIntoView({ behavior: "smooth" });
+    scrollToElement(topRef.current);
   };
 
   // Keep the document title in sync with the current view (WCAG 2.4.2).
@@ -1406,7 +1414,6 @@ export default function App() {
 
   return (
     <div ref={topRef} style={{ background: COLORS.bg, minHeight: "100vh", fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>
-      <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,500;0,600;1,400&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
       <SkipLink />
       <Nav current={page} onNav={navigate} />
       <main id="main-content" ref={mainRef} tabIndex={-1} style={{ outline: "none" }}>
