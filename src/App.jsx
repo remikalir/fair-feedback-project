@@ -1333,8 +1333,8 @@ function Footer() {
       fontFamily: "'Source Sans 3', system-ui, sans-serif",
       lineHeight: 1.6,
     }}>
-      <p style={{ margin: "0 0 4px" }}>The Fair Feedback Project — Created by Remi Kalir, PhD, in collaboration with Claude</p>
-      <p style={{ margin: "0 0 4px" }}>An openly accessible, evidence-based resource | Not affiliated with any institution</p>
+      <p style={{ margin: "0 0 4px" }}>Created by Remi Kalir, PhD, in collaboration with Claude | Not affiliated with any institution</p>
+      <p style={{ margin: "0 0 4px" }}>Please cite as: Kalir, R. (2026). The Fair Feedback Project. https://fairfeedbackproject.org — released under CC BY-NC-SA 4.0.</p>
       <p style={{ margin: 0 }}>
         <a href="https://forms.gle/m8JihbGLbq1SirLD9" target="_blank" rel="noopener noreferrer" style={linkStyle}
           onMouseEnter={(e) => e.target.style.color = COLORS.accent}
