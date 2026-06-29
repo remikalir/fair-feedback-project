@@ -31,9 +31,37 @@
     <meta name="twitter:image" content="https://fairfeedbackproject.org/og-image.png" />
     <meta name="twitter:image:alt" content="Title card for The Fair Feedback Project, showing the project name above the tagline: research-based, openly available tools to help instructors and institutions address documented bias in student evaluations of teaching." />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,500;0,600;1,400&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+    <!-- Self-hosted fonts: no third-party (Google) requests on page load -->
+    <link rel="preload" href="/fonts/source-sans-3-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/source-serif-4-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <style>
+      /* Source Sans 3 — variable weight axis (200–900), latin subset, self-hosted */
+      @font-face {
+        font-family: 'Source Sans 3';
+        font-style: normal;
+        font-weight: 200 900;
+        font-display: swap;
+        src: url('/fonts/source-sans-3-latin-wght-normal.woff2') format('woff2-variations');
+        unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+      }
+      @font-face {
+        font-family: 'Source Sans 3';
+        font-style: italic;
+        font-weight: 200 900;
+        font-display: swap;
+        src: url('/fonts/source-sans-3-latin-wght-italic.woff2') format('woff2-variations');
+        unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+      }
+      /* Source Serif 4 — variable weight axis (200–900), latin subset, self-hosted */
+      @font-face {
+        font-family: 'Source Serif 4';
+        font-style: normal;
+        font-weight: 200 900;
+        font-display: swap;
+        src: url('/fonts/source-serif-4-latin-wght-normal.woff2') format('woff2-variations');
+        unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+      }
+    </style>
     <title>The Fair Feedback Project</title>
   </head>
   <body>
