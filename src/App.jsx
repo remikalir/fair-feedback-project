@@ -268,6 +268,7 @@ function TrackCard({ label, title, description, action, accent, accentBg, onClic
     display: "flex",
     flexDirection: "column",
     width: "100%",
+    boxSizing: "border-box",
     textAlign: "left",
     font: "inherit",
     color: "inherit",
