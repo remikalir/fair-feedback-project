@@ -1,4 +1,6 @@
 {
+  "buildCommand": "react-router build",
+  "outputDirectory": "build/client",
   "headers": [
     {
       "source": "/(.*)",
