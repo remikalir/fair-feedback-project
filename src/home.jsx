@@ -1,16 +1,22 @@
+import { COLORS } from "./colors";
+
 export function meta() {
-  return [{ title: "FFP — Tier 3 routing boot test" }];
+  return [{ title: "The Fair Feedback Project" }];
 }
 
 export default function Home() {
   return (
-    <main style={{ fontFamily: "system-ui, sans-serif", padding: "3rem", maxWidth: 640, margin: "0 auto", lineHeight: 1.6 }}>
-      <h1>React Router v8 is prerendering.</h1>
-      <p>
-        This is the Batch 1 plumbing test for the Tier 3 routing migration. If you are
-        reading this as static HTML on the preview URL, the prerender pipeline works.
-        The real Fair Feedback Project views get wired in at Batch 2.
+    <div style={{ maxWidth: 680, margin: "0 auto", padding: "3rem 1.25rem 5rem" }}>
+      <h1 style={{ fontFamily: "'Source Serif 4', Georgia, serif", fontWeight: 600, fontSize: 32, color: COLORS.slate900, lineHeight: 1.2 }}>
+        Batch 2 · step 1 — shell migrated
+      </h1>
+      <p style={{ fontFamily: "'Source Sans 3', system-ui, sans-serif", color: COLORS.slate600, lineHeight: 1.6, fontSize: 17 }}>
+        The document head (self-hosted fonts, social tags, icons, canonical, theme-color)
+        and the route-independent chrome (skip link, footer) now live in root.jsx, with the
+        COLORS tokens in a shared module. If this heading renders in Source Serif 4 and this
+        paragraph in Source Sans 3 on the paper background, with the footer below, the head
+        and shell migration is good. The five real views get wired to routes in step 2.
       </p>
-    </main>
+    </div>
   );
 }

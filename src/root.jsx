@@ -1,4 +1,36 @@
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
+import { COLORS } from "./colors";
+import SkipLink from "./SkipLink";
+import Footer from "./Footer";
+
+const FONT_FACE_CSS = `
+/* Source Sans 3 — variable weight axis (200-900), latin subset, self-hosted */
+@font-face {
+  font-family: 'Source Sans 3';
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url('/fonts/source-sans-3-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: 'Source Sans 3';
+  font-style: italic;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url('/fonts/source-sans-3-latin-wght-italic.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+/* Source Serif 4 — variable weight axis (200-900), latin subset, self-hosted */
+@font-face {
+  font-family: 'Source Serif 4';
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url('/fonts/source-serif-4-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+`;
 
 export function Layout({ children }) {
   return (
@@ -6,6 +38,39 @@ export function Layout({ children }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="canonical" href="https://fairfeedbackproject.org/" />
+        <meta name="theme-color" content="#faf9f7" />
+
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+        <meta name="description" content="Evidence-based strategies for addressing bias in student evaluations of teaching." />
+
+        {/* Open Graph / social link previews */}
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="The Fair Feedback Project" />
+        <meta property="og:url" content="https://fairfeedbackproject.org/" />
+        <meta property="og:title" content="The Fair Feedback Project" />
+        <meta property="og:description" content="Research-based, openly available tools to help instructors and institutions address documented bias in student evaluations of teaching." />
+        <meta property="og:image" content="https://fairfeedbackproject.org/og-image.png" />
+        <meta property="og:image:type" content="image/png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="Title card for The Fair Feedback Project, showing the project name above the tagline: research-based, openly available tools to help instructors and institutions address documented bias in student evaluations of teaching." />
+
+        {/* Twitter / X */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="The Fair Feedback Project" />
+        <meta name="twitter:description" content="Research-based, openly available tools to help instructors and institutions address documented bias in student evaluations of teaching." />
+        <meta name="twitter:image" content="https://fairfeedbackproject.org/og-image.png" />
+        <meta name="twitter:image:alt" content="Title card for The Fair Feedback Project, showing the project name above the tagline: research-based, openly available tools to help instructors and institutions address documented bias in student evaluations of teaching." />
+
+        {/* Self-hosted fonts: no third-party (Google) requests on page load */}
+        <link rel="preload" href="/fonts/source-sans-3-latin-wght-normal.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/source-serif-4-latin-wght-normal.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <style dangerouslySetInnerHTML={{ __html: FONT_FACE_CSS }} />
+
         <Meta />
         <Links />
       </head>
@@ -19,5 +84,13 @@ export function Layout({ children }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  return (
+    <div style={{ background: COLORS.bg, minHeight: "100vh", fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>
+      <SkipLink />
+      <main id="main-content" tabIndex={-1} style={{ outline: "none" }}>
+        <Outlet />
+      </main>
+      <Footer />
+    </div>
+  );
 }
