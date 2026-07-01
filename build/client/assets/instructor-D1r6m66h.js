@@ -1,1 +1,0 @@
-import{S as e,t}from"./jsx-runtime-DbkiLxA9.js";import{r as n}from"./App-F5rd0yTs.js";var r=t();function i(){return[{title:`Instructor Track — The Fair Feedback Project`}]}var a=e(function(){return(0,r.jsx)(n,{})});export{a as default,i as meta};

@@ -1,1 +1,0 @@
-import{S as e,t}from"./jsx-runtime-DbkiLxA9.js";import{a as n}from"./App-F5rd0yTs.js";var r=t();function i(){return[{title:`Principles — The Fair Feedback Project`}]}var a=e(function(){return(0,r.jsx)(n,{})});export{a as default,i as meta};
