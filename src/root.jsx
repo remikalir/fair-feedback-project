@@ -40,31 +40,31 @@ export function Layout({ children }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="canonical" href="https://fairfeedbackproject.org/" />
         <meta name="theme-color" content="#faf9f7" />
 
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 
-        <meta name="description" content="Evidence-based strategies for addressing bias in student evaluations of teaching." />
+        {/*
+          Per-route tags — description, canonical, og:url, og:title, og:description,
+          twitter:title, twitter:description — are emitted by each route module's
+          meta() export (via src/routeMeta.js), so they differ per page. Only the
+          invariant OG/Twitter tags (type, site_name, and the shared card image)
+          remain static here.
+        */}
 
-        {/* Open Graph / social link previews */}
+        {/* Open Graph / social link previews (shared, invariant) */}
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="The Fair Feedback Project" />
-        <meta property="og:url" content="https://fairfeedbackproject.org/" />
-        <meta property="og:title" content="The Fair Feedback Project" />
-        <meta property="og:description" content="Research-based, openly available tools to help instructors and institutions address documented bias in student evaluations of teaching." />
         <meta property="og:image" content="https://fairfeedbackproject.org/og-image.png" />
         <meta property="og:image:type" content="image/png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content="Title card for The Fair Feedback Project, showing the project name above the tagline: research-based, openly available tools to help instructors and institutions address documented bias in student evaluations of teaching." />
 
-        {/* Twitter / X */}
+        {/* Twitter / X (shared, invariant) */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="The Fair Feedback Project" />
-        <meta name="twitter:description" content="Research-based, openly available tools to help instructors and institutions address documented bias in student evaluations of teaching." />
         <meta name="twitter:image" content="https://fairfeedbackproject.org/og-image.png" />
         <meta name="twitter:image:alt" content="Title card for The Fair Feedback Project, showing the project name above the tagline: research-based, openly available tools to help instructors and institutions address documented bias in student evaluations of teaching." />
 
