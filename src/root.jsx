@@ -1,6 +1,8 @@
-import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
+import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLocation } from "react-router";
+import { useEffect, useRef } from "react";
 import { COLORS } from "./colors";
 import SkipLink from "./SkipLink";
+import Nav from "./Nav";
 import Footer from "./Footer";
 
 const FONT_FACE_CSS = `
@@ -84,10 +86,26 @@ export function Layout({ children }) {
 }
 
 export default function App() {
+  const location = useLocation();
+  const mainRef = useRef(null);
+  const firstRender = useRef(true);
+
+  // On view change (but not initial load), move focus into the main region so
+  // keyboard and screen-reader users are taken to the new content (WCAG 2.4.3).
+  // ScrollRestoration (in Layout) handles resetting scroll position on navigation.
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+      return;
+    }
+    mainRef.current?.focus({ preventScroll: true });
+  }, [location.pathname]);
+
   return (
     <div style={{ background: COLORS.bg, minHeight: "100vh", fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>
       <SkipLink />
-      <main id="main-content" tabIndex={-1} style={{ outline: "none" }}>
+      <Nav />
+      <main id="main-content" ref={mainRef} tabIndex={-1} style={{ outline: "none" }}>
         <Outlet />
       </main>
       <Footer />

@@ -14,20 +14,52 @@ type Pages = {
   "/": {
     params: {};
   };
+  "/about": {
+    params: {};
+  };
+  "/principles": {
+    params: {};
+  };
+  "/faq": {
+    params: {};
+  };
+  "/instructor": {
+    params: {};
+  };
 };
 
 type RouteFiles = {
   "root.jsx": {
     id: "root";
+    page: "/" | "/about" | "/principles" | "/faq" | "/instructor";
+  };
+  "routes/home.jsx": {
+    id: "routes/home";
     page: "/";
   };
-  "home.jsx": {
-    id: "home";
-    page: "/";
+  "routes/about.jsx": {
+    id: "routes/about";
+    page: "/about";
+  };
+  "routes/principles.jsx": {
+    id: "routes/principles";
+    page: "/principles";
+  };
+  "routes/faq.jsx": {
+    id: "routes/faq";
+    page: "/faq";
+  };
+  "routes/instructor.jsx": {
+    id: "routes/instructor";
+    page: "/instructor";
   };
 };
 
 type RouteModules = {
   "root": typeof import("./src/root.jsx");
-  "home": typeof import("./src/home.jsx");
+  "routes/home": typeof import("./src/routes/home.jsx");
+  "routes/about": typeof import("./src/routes/about.jsx");
+  "routes/principles": typeof import("./src/routes/principles.jsx");
+  "routes/faq": typeof import("./src/routes/faq.jsx");
+  "routes/instructor": typeof import("./src/routes/instructor.jsx");
 };

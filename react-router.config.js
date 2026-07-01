@@ -1,5 +1,5 @@
 export default {
   appDirectory: "src",
   ssr: false,
-  prerender: ["/"],
+  prerender: ["/", "/about", "/principles", "/faq", "/instructor"],
 };

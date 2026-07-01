@@ -1,28 +1,6 @@
 import { useState, useEffect, useRef, useId } from "react";
-
-const COLORS = {
-  slate900: "#2d3436",
-  slate700: "#4a5568",
-  slate600: "#636e72",
-  slate500: "#69727f",
-  slate400: "#a0aab4",
-  slate200: "#e2e8f0",
-  slate100: "#f1f3f5",
-  slate50: "#f8f9fa",
-  accent: "#5b4a8a",
-  accentLight: "#eeebf5",
-  accentDark: "#3d3160",
-  green: "#2d6a4f",
-  greenLight: "#e8f3ed",
-  greenDark: "#1b4332",
-  azure: "#1392D3",
-  azureLight: "#e8f4fb",
-  azureDark: "#0b6fa3",
-  text: "#2d3436",
-  textSecondary: "#636e72",
-  bg: "#faf9f7",
-  white: "#ffffff",
-};
+import { Link } from "react-router";
+import { COLORS } from "./colors";
 
 // Visually hidden but available to assistive tech (for live-region announcements).
 const SR_ONLY = {
@@ -45,81 +23,11 @@ function scrollToElement(el) {
   el.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
 }
 
-const NAV_ITEMS = [
-  { id: "home", label: "Home" },
-  { id: "about", label: "About" },
-  { id: "principles", label: "Principles" },
-  { id: "faq", label: "FAQ" },
-];
-
-function Nav({ current, onNav }) {
-  return (
-    <nav style={{
-      borderBottom: `1px solid ${COLORS.slate200}`,
-      background: COLORS.white,
-      padding: "0 1.25rem",
-      position: "sticky",
-      top: 0,
-      zIndex: 100,
-    }}>
-      <div style={{
-        maxWidth: 960,
-        margin: "0 auto",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        minHeight: 56,
-        flexWrap: "wrap",
-        gap: "4px 0",
-        padding: "8px 0",
-      }}>
-        <button
-          onClick={() => onNav("home")}
-          style={{
-            background: "none",
-            border: "none",
-            cursor: "pointer",
-            fontFamily: "'Source Serif 4', Georgia, serif",
-            fontSize: 17,
-            fontWeight: 600,
-            color: COLORS.slate900,
-            padding: 0,
-            letterSpacing: "-0.01em",
-          }}
-        >
-          The Fair Feedback Project
-        </button>
-        <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
-          {NAV_ITEMS.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => onNav(item.id)}
-              style={{
-                background: current === item.id ? COLORS.slate100 : "none",
-                border: "none",
-                cursor: "pointer",
-                padding: "6px 12px",
-                borderRadius: 6,
-                fontSize: 14,
-                color: current === item.id ? COLORS.slate900 : COLORS.slate600,
-                fontWeight: current === item.id ? 500 : 400,
-                transition: "all 0.15s ease",
-                fontFamily: "'Source Sans 3', system-ui, sans-serif",
-              }}
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
-      </div>
-    </nav>
-  );
-}
-
-function Landing({ onNav }) {
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
+export function Landing() {
+  const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
     const handler = () => setIsMobile(window.innerWidth < 640);
+    handler(); // set the real value on the client after hydration (SSR/prerender-safe)
     window.addEventListener("resize", handler);
     return () => window.removeEventListener("resize", handler);
   }, []);
@@ -179,7 +87,7 @@ function Landing({ onNav }) {
           action="Start generating materials"
           accent={COLORS.accent}
           accentBg={COLORS.accentLight}
-          onClick={() => onNav("instructor")}
+          to="/instructor"
         />
         <TrackCard
           label="For institutions"
@@ -221,9 +129,9 @@ function Landing({ onNav }) {
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             {["about", "principles", "faq"].map((id) => (
-              <button
+              <Link
                 key={id}
-                onClick={() => onNav(id)}
+                to={`/${id}`}
                 style={{
                   background: "none",
                   border: `1px solid ${COLORS.slate200}`,
@@ -232,6 +140,7 @@ function Landing({ onNav }) {
                   fontSize: 14,
                   color: COLORS.slate700,
                   cursor: "pointer",
+                  textDecoration: "none",
                   fontFamily: "'Source Sans 3', system-ui, sans-serif",
                   transition: "all 0.15s ease",
                 }}
@@ -245,7 +154,7 @@ function Landing({ onNav }) {
                 }}
               >
                 {id === "about" ? "About" : id === "principles" ? "Principles" : "FAQ"}
-              </button>
+              </Link>
             ))}
           </div>
         </div>
@@ -254,9 +163,9 @@ function Landing({ onNav }) {
   );
 }
 
-function TrackCard({ label, title, description, action, accent, accentBg, onClick }) {
+export function TrackCard({ label, title, description, action, accent, accentBg, to }) {
   const [hovered, setHovered] = useState(false);
-  const clickable = !!onClick;
+  const clickable = !!to;
 
   const cardStyle = {
     background: COLORS.white,
@@ -322,19 +231,18 @@ function TrackCard({ label, title, description, action, accent, accentBg, onClic
   // explicit aria-label keeps the accessible name concise.
   if (clickable) {
     return (
-      <button
-        type="button"
-        onClick={onClick}
+      <Link
+        to={to}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         aria-label={`${title} — ${action}`}
-        style={cardStyle}
+        style={{ ...cardStyle, textDecoration: "none" }}
       >
         {badge}
         <span style={{ ...titleStyle, display: "block" }}>{title}</span>
         <span style={{ ...descStyle, display: "block" }}>{description}</span>
         <span style={actionStyle}>{action}</span>
-      </button>
+      </Link>
     );
   }
 
@@ -552,7 +460,7 @@ const PRINCIPLES_SECTIONS = [
   { id: "prin-nuance", label: "Care and nuance" },
 ];
 
-function AboutPage() {
+export function AboutPage() {
   const topRef = useRef(null);
 
   return (
@@ -641,7 +549,7 @@ const REFERENCES = [
   "Uttl, B., White, C. A., & Gonzalez, D. W. (2017). Meta-analysis of faculty's teaching effectiveness: Student evaluation of teaching ratings and student learning are not related. Studies in Educational Evaluation, 54, 22–42.",
 ];
 
-function PrinciplesPage() {
+export function PrinciplesPage() {
   const topRef = useRef(null);
 
   return (
@@ -698,7 +606,7 @@ const FAQ_SECTIONS = [
   { id: "faq-institutional", label: "Institutional use" },
 ];
 
-function FAQPage() {
+export function FAQPage() {
   const faqTopRef = useRef(null);
 
   return (
@@ -1083,7 +991,7 @@ function CheckGroup({ label, options, values, onChange }) {
   );
 }
 
-function InstructorTrack({ onNav }) {
+export function InstructorTrack() {
   const [step, setStep] = useState(0);
   const [deployment, setDeployment] = useState(["all"]);
   const [discipline, setDiscipline] = useState("");
@@ -1262,10 +1170,10 @@ function InstructorTrack({ onNav }) {
               style={{ background: "none", border: `1px solid ${COLORS.slate200}`, borderRadius: 6, padding: "8px 20px", fontSize: 14, color: COLORS.slate700, cursor: "pointer", fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>
               Start over
             </button>
-            <button onClick={() => onNav("home")}
-              style={{ background: "none", border: `1px solid ${COLORS.slate200}`, borderRadius: 6, padding: "8px 20px", fontSize: 14, color: COLORS.slate700, cursor: "pointer", fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>
+            <Link to="/"
+              style={{ background: "none", border: `1px solid ${COLORS.slate200}`, borderRadius: 6, padding: "8px 20px", fontSize: 14, color: COLORS.slate700, cursor: "pointer", textDecoration: "none", fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>
               Return home
-            </button>
+            </Link>
           </div>
         </div>
       )}
@@ -1316,120 +1224,3 @@ function StepNav({ step, canProceed, onBack, onNext, nextLabel, hint }) {
   );
 }
 
-function Footer() {
-  const linkStyle = {
-    color: COLORS.slate500,
-    textDecoration: "underline",
-    textUnderlineOffset: "2px",
-    transition: "color 0.15s ease",
-  };
-  return (
-    <footer style={{
-      borderTop: `1px solid ${COLORS.slate200}`,
-      padding: "2rem 1.25rem",
-      textAlign: "center",
-      fontSize: 13,
-      color: COLORS.slate500,
-      fontFamily: "'Source Sans 3', system-ui, sans-serif",
-      lineHeight: 1.6,
-    }}>
-      <p style={{ margin: "0 4px" }}>Created by <a href="https://remikalir.com" target="_blank" rel="noopener noreferrer" style={linkStyle}
-          onMouseEnter={(e) => e.target.style.color = COLORS.accent}
-          onMouseLeave={(e) => e.target.style.color = COLORS.slate500}
-        >Remi Kalir, PhD</a>, in collaboration with Claude (Opus 4.6 & 4.8)
-        <span style={{ margin: "0 8px" }}>|</span>
-        Not affiliated with any institution</p>
-      <p style={{ margin: "0 0 4px" }}>Please cite as: Kalir, R. (2026). The Fair Feedback Project. https://fairfeedbackproject.org — released under CC BY-NC-SA 4.0.</p>
-      <p style={{ margin: 0 }}>
-        <a href="https://forms.gle/m8JihbGLbq1SirLD9" target="_blank" rel="noopener noreferrer" style={linkStyle}
-          onMouseEnter={(e) => e.target.style.color = COLORS.accent}
-          onMouseLeave={(e) => e.target.style.color = COLORS.slate500}
-        >Share your feedback and suggestions</a>
-        <span style={{ margin: "0 8px" }}>|</span>
-        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" style={linkStyle}
-          onMouseEnter={(e) => e.target.style.color = COLORS.accent}
-          onMouseLeave={(e) => e.target.style.color = COLORS.slate500}
-        >CC BY-NC-SA 4.0</a>
-      </p>
-    </footer>
-  );
-}
-
-function SkipLink() {
-  const [focused, setFocused] = useState(false);
-  return (
-    <a
-      href="#main-content"
-      onFocus={() => setFocused(true)}
-      onBlur={() => setFocused(false)}
-      style={{
-        position: "absolute",
-        left: focused ? 12 : -9999,
-        top: focused ? 12 : "auto",
-        zIndex: 200,
-        background: COLORS.white,
-        color: COLORS.accentDark,
-        border: `1px solid ${COLORS.accent}`,
-        borderRadius: 6,
-        padding: "8px 16px",
-        fontSize: 14,
-        fontWeight: 500,
-        fontFamily: "'Source Sans 3', system-ui, sans-serif",
-        textDecoration: "none",
-      }}
-    >
-      Skip to main content
-    </a>
-  );
-}
-
-const PAGE_TITLES = {
-  home: "The Fair Feedback Project",
-  about: "About — The Fair Feedback Project",
-  principles: "Principles — The Fair Feedback Project",
-  faq: "Frequently Asked Questions — The Fair Feedback Project",
-  instructor: "Instructor Track — The Fair Feedback Project",
-};
-
-export default function App() {
-  const [page, setPage] = useState("home");
-  const topRef = useRef(null);
-  const mainRef = useRef(null);
-  const firstPageRender = useRef(true);
-
-  const navigate = (id) => {
-    setPage(id);
-    scrollToElement(topRef.current);
-  };
-
-  // Keep the document title in sync with the current view (WCAG 2.4.2).
-  useEffect(() => {
-    document.title = PAGE_TITLES[page] || PAGE_TITLES.home;
-  }, [page]);
-
-  // On view change (but not initial load), move focus into the main region so
-  // keyboard and screen-reader users are taken to the new content. preventScroll
-  // keeps the existing smooth-scroll-to-top from being overridden.
-  useEffect(() => {
-    if (firstPageRender.current) {
-      firstPageRender.current = false;
-      return;
-    }
-    mainRef.current?.focus({ preventScroll: true });
-  }, [page]);
-
-  return (
-    <div ref={topRef} style={{ background: COLORS.bg, minHeight: "100vh", fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>
-      <SkipLink />
-      <Nav current={page} onNav={navigate} />
-      <main id="main-content" ref={mainRef} tabIndex={-1} style={{ outline: "none" }}>
-        {page === "home" && <Landing onNav={navigate} />}
-        {page === "about" && <AboutPage />}
-        {page === "principles" && <PrinciplesPage />}
-        {page === "faq" && <FAQPage />}
-        {page === "instructor" && <InstructorTrack onNav={navigate} />}
-      </main>
-      <Footer />
-    </div>
-  );
-}
