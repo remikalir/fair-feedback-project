@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useId, Fragment } from "react";
 import { Link } from "react-router";
 import { COLORS } from "./colors";
 import { FAQ_DATA } from "./faqData";
+import { HOW_IT_WORKS, QUOTES, PODCAST } from "./homeContent";
 
 // Visually hidden but available to assistive tech (for live-region announcements).
 const SR_ONLY = {
@@ -24,6 +25,50 @@ function scrollToElement(el) {
   el.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
 }
 
+const SANS = "'Source Sans 3', system-ui, sans-serif";
+const SERIF = "'Source Serif 4', Georgia, serif";
+
+function SectionHeading({ id, children }) {
+  return (
+    <h2 id={id} style={{
+      fontFamily: SERIF,
+      fontSize: 24,
+      fontWeight: 600,
+      color: COLORS.slate900,
+      lineHeight: 1.25,
+      margin: "0 0 1.5rem",
+      textAlign: "center",
+    }}>
+      {children}
+    </h2>
+  );
+}
+
+function PrimaryCTA({ to, children }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <Link
+      to={to}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        display: "inline-block",
+        background: hovered ? COLORS.accentDark : COLORS.accent,
+        color: COLORS.white,
+        borderRadius: 8,
+        padding: "14px 32px",
+        fontSize: 16,
+        fontWeight: 600,
+        textDecoration: "none",
+        fontFamily: SANS,
+        transition: "background 0.15s ease",
+      }}
+    >
+      {children}
+    </Link>
+  );
+}
+
 export function Landing() {
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
@@ -33,16 +78,19 @@ export function Landing() {
     return () => window.removeEventListener("resize", handler);
   }, []);
 
+  const sectionPad = isMobile ? "0 1.25rem" : "0 2rem";
+
   return (
     <div>
+      {/* Hero */}
       <div style={{
         textAlign: "center",
-        padding: isMobile ? "3rem 1.25rem 2rem" : "5rem 2rem 3rem",
+        padding: isMobile ? "3rem 1.25rem 2.5rem" : "5rem 2rem 3.5rem",
         maxWidth: 720,
         margin: "0 auto",
       }}>
         <h1 style={{
-          fontFamily: "'Source Serif 4', Georgia, serif",
+          fontFamily: SERIF,
           fontSize: isMobile ? 30 : 40,
           fontWeight: 600,
           color: COLORS.slate900,
@@ -53,80 +101,155 @@ export function Landing() {
           The Fair Feedback Project
         </h1>
         <p style={{
-          fontSize: isMobile ? 16 : 18,
-          color: COLORS.slate600,
-          lineHeight: 1.65,
-          margin: "0 0 0.5rem",
-          fontFamily: "'Source Sans 3', system-ui, sans-serif",
+          fontSize: isMobile ? 17 : 19,
+          color: COLORS.slate700,
+          lineHeight: 1.6,
+          margin: "0 0 1rem",
+          fontFamily: SANS,
         }}>
           Evidence-based strategies for addressing bias in student evaluations of teaching.
         </p>
         <p style={{
-          fontSize: isMobile ? 14 : 15,
+          fontSize: isMobile ? 15 : 16,
+          color: COLORS.slate600,
+          lineHeight: 1.65,
+          margin: "0 auto 2rem",
+          maxWidth: 580,
+          fontFamily: SANS,
+        }}>
+          Decades of peer-reviewed research show that student evaluations are influenced by instructor gender, race, ethnicity, and other factors unrelated to teaching quality. In about two minutes, create course-specific materials, grounded in the intervention research, to share with your students before evaluations open.
+        </p>
+        <PrimaryCTA to="/instructor">Create your materials</PrimaryCTA>
+        <p style={{
+          fontSize: 14,
           color: COLORS.slate500,
           lineHeight: 1.6,
-          margin: "0 auto 3.5rem",
-          maxWidth: 560,
-          fontFamily: "'Source Sans 3', system-ui, sans-serif",
+          margin: "1rem 0 0",
+          fontFamily: SANS,
         }}>
-          Decades of peer-reviewed research document that student evaluations are influenced by instructor gender, race, ethnicity, and other factors unrelated to teaching quality. This project provides practical, research-grounded resources for instructors and institutions.
+          Free and openly available. Nothing you enter is collected, stored, or transmitted, ever.
         </p>
       </div>
 
-      <div style={{
-        maxWidth: 800,
-        margin: "0 auto 4rem",
-        padding: "0 1.25rem",
-        display: "grid",
-        gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
-        gap: 24,
-      }}>
-        <TrackCard
-          label="For instructors"
-          title="Instructor Track"
-          description="Generate course-specific anti-bias statements, discussion guides, and mitigation strategies grounded in the intervention research. Designed for immediate use this semester."
-          action="Start generating materials"
-          accent={COLORS.accent}
-          accentBg={COLORS.accentLight}
-          to="/instructor"
-        />
-        <TrackCard
-          label="For institutions"
-          title="Institutional Track"
-          description="Access research briefs, reform models, policy templates, and workshop resources for centers for teaching and learning, department chairs, and administrators."
-          action="Coming soon"
-          accent={COLORS.green}
-          accentBg={COLORS.greenLight}
-        />
-      </div>
-
-      <div style={{
-        maxWidth: 640,
-        margin: "0 auto 5rem",
-        padding: "0 1.25rem",
-        textAlign: "center",
-      }}>
-        <div style={{
-          borderTop: `1px solid ${COLORS.slate200}`,
-          paddingTop: "2.5rem",
+      {/* How it works */}
+      <section aria-labelledby="home-how" style={{ maxWidth: 880, margin: "0 auto 4.5rem", padding: sectionPad }}>
+        <SectionHeading id="home-how">How it works</SectionHeading>
+        <ol style={{
+          listStyle: "none",
+          padding: 0,
+          margin: 0,
+          display: "grid",
+          gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)",
+          gap: isMobile ? 16 : 20,
         }}>
-          <p style={{
-            fontSize: 14,
-            color: COLORS.slate500,
-            lineHeight: 1.7,
-            margin: "0 0 1.5rem",
-            fontFamily: "'Source Sans 3', system-ui, sans-serif",
-          }}>
-            Before exploring the tracks, we recommend reading about the research and principles that guide this project.
+          {HOW_IT_WORKS.map((s, i) => (
+            <li key={s.title} style={{
+              background: COLORS.white,
+              border: `1px solid ${COLORS.slate200}`,
+              borderRadius: 10,
+              padding: "1.5rem 1.25rem",
+              fontFamily: SANS,
+            }}>
+              <span aria-hidden="true" style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: 30,
+                height: 30,
+                borderRadius: "50%",
+                background: COLORS.accentLight,
+                color: COLORS.accent,
+                fontWeight: 600,
+                fontSize: 15,
+                marginBottom: 12,
+              }}>
+                {i + 1}
+              </span>
+              <h3 style={{ fontFamily: SERIF, fontSize: 18, fontWeight: 600, color: COLORS.slate900, margin: "0 0 8px", lineHeight: 1.3 }}>
+                {s.title}
+              </h3>
+              <p style={{ fontSize: 14.5, color: COLORS.slate600, lineHeight: 1.65, margin: 0 }}>
+                {s.text}
+              </p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      {/* Quotes */}
+      <section aria-labelledby="home-quotes" style={{ maxWidth: 880, margin: "0 auto 4.5rem", padding: sectionPad }}>
+        <SectionHeading id="home-quotes">Instructors are using The Fair Feedback Project</SectionHeading>
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+          gap: isMobile ? 16 : 20,
+        }}>
+          {QUOTES.map((q) => (
+            <figure key={q.slice(0, 32)} style={{
+              margin: 0,
+              background: COLORS.white,
+              borderLeft: `3px solid ${COLORS.accent}`,
+              borderRadius: "0 10px 10px 0",
+              padding: "1.25rem 1.5rem",
+            }}>
+              <blockquote style={{
+                margin: 0,
+                fontFamily: SERIF,
+                fontSize: 16,
+                lineHeight: 1.65,
+                color: COLORS.slate700,
+              }}>
+                {"“"}{q}{"”"}
+              </blockquote>
+            </figure>
+          ))}
+        </div>
+        <p style={{ fontSize: 13, color: COLORS.slate500, textAlign: "center", margin: "1.25rem 0 0", fontFamily: SANS }}>
+          Shared publicly on social media in spring 2026 and quoted here anonymously.
+        </p>
+      </section>
+
+      {/* Podcast */}
+      <section aria-labelledby="home-podcast" style={{ maxWidth: 720, margin: "0 auto 4.5rem", padding: sectionPad }}>
+        <div style={{
+          background: COLORS.greenLight,
+          border: `1px solid ${COLORS.green}33`,
+          borderRadius: 12,
+          padding: isMobile ? "1.75rem 1.25rem" : "2rem 2.25rem",
+          fontFamily: SANS,
+        }}>
+          <p style={{ fontSize: 12, fontWeight: 600, color: COLORS.greenDark, textTransform: "uppercase", letterSpacing: "0.06em", margin: "0 0 6px" }}>
+            As heard on
           </p>
-	  <p style={{
-            fontSize: 14,
-            color: COLORS.slate500,
-            lineHeight: 1.7,
-            margin: "0 0 1.5rem",
-            fontFamily: "'Source Sans 3', system-ui, sans-serif",
-          }}>
-            Your privacy matters: The Fair Feedback Project does not collect, store, or transmit any of your data, ever.
+          <h2 id="home-podcast" style={{ fontFamily: SERIF, fontSize: 24, fontWeight: 600, color: COLORS.slate900, margin: "0 0 4px", lineHeight: 1.25 }}>
+            {PODCAST.show}
+          </h2>
+          <p style={{ fontSize: 14.5, color: COLORS.slate600, margin: "0 0 1.25rem", lineHeight: 1.5 }}>
+            {PODCAST.episode}. Hosted by {PODCAST.host}, {PODCAST.date}.
+          </p>
+          <figure style={{ margin: "0 0 1.25rem" }}>
+            <blockquote style={{ margin: 0, fontFamily: SERIF, fontSize: 18, lineHeight: 1.55, color: COLORS.slate900 }}>
+              {"“"}{PODCAST.quote}{"”"}
+            </blockquote>
+            <figcaption style={{ fontSize: 14, color: COLORS.slate600, marginTop: 8 }}>Remi Kalir, on the episode</figcaption>
+          </figure>
+          <a
+            href={PODCAST.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ fontSize: 15, fontWeight: 600, color: COLORS.greenDark }}
+          >
+            Listen to the episode and read the transcript
+            <span style={SR_ONLY}> (opens in a new tab)</span>
+          </a>
+        </div>
+      </section>
+
+      {/* Further reading */}
+      <div style={{ maxWidth: 640, margin: "0 auto 5rem", padding: "0 1.25rem", textAlign: "center" }}>
+        <div style={{ borderTop: `1px solid ${COLORS.slate200}`, paddingTop: "2.5rem" }}>
+          <p style={{ fontSize: 14, color: COLORS.slate500, lineHeight: 1.7, margin: "0 0 1.5rem", fontFamily: SANS }}>
+            Want the full picture? Read about the research and principles that guide this project.
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             {["about", "principles", "faq"].map((id) => (
@@ -142,7 +265,7 @@ export function Landing() {
                   color: COLORS.slate700,
                   cursor: "pointer",
                   textDecoration: "none",
-                  fontFamily: "'Source Sans 3', system-ui, sans-serif",
+                  fontFamily: SANS,
                   transition: "all 0.15s ease",
                 }}
                 onMouseEnter={(e) => {
@@ -160,104 +283,6 @@ export function Landing() {
           </div>
         </div>
       </div>
-    </div>
-  );
-}
-
-export function TrackCard({ label, title, description, action, accent, accentBg, to }) {
-  const [hovered, setHovered] = useState(false);
-  const clickable = !!to;
-
-  const cardStyle = {
-    background: COLORS.white,
-    border: `1px solid ${hovered ? accent : COLORS.slate200}`,
-    borderRadius: 10,
-    padding: "2rem 1.75rem",
-    cursor: clickable ? "pointer" : "default",
-    transition: "border-color 0.2s ease",
-    display: "flex",
-    flexDirection: "column",
-    width: "100%",
-    boxSizing: "border-box",
-    textAlign: "left",
-    font: "inherit",
-    color: "inherit",
-  };
-
-  const badge = (
-    <span style={{
-      display: "inline-block",
-      fontSize: 12,
-      fontWeight: 500,
-      color: accent,
-      background: accentBg,
-      padding: "3px 10px",
-      borderRadius: 4,
-      marginBottom: 14,
-      alignSelf: "flex-start",
-      fontFamily: "'Source Sans 3', system-ui, sans-serif",
-      textTransform: "uppercase",
-      letterSpacing: "0.04em",
-    }}>
-      {label}
-    </span>
-  );
-
-  const titleStyle = {
-    fontFamily: "'Source Serif 4', Georgia, serif",
-    fontSize: 22,
-    fontWeight: 600,
-    color: COLORS.slate900,
-    margin: "0 0 10px",
-  };
-
-  const descStyle = {
-    fontSize: 14.5,
-    color: COLORS.slate600,
-    lineHeight: 1.65,
-    margin: "0 0 1.5rem",
-    flex: 1,
-    fontFamily: "'Source Sans 3', system-ui, sans-serif",
-  };
-
-  const actionStyle = {
-    fontSize: 13,
-    color: COLORS.slate600,
-    fontStyle: "italic",
-    fontFamily: "'Source Sans 3', system-ui, sans-serif",
-  };
-
-  // Clickable card renders as a native <button>. Its content is phrasing-only
-  // (spans, not <h2>/<p>) so the markup is valid inside a button, and an
-  // explicit aria-label keeps the accessible name concise.
-  if (clickable) {
-    return (
-      <Link
-        to={to}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        aria-label={`${title} — ${action}`}
-        style={{ ...cardStyle, textDecoration: "none" }}
-      >
-        {badge}
-        <span style={{ ...titleStyle, display: "block" }}>{title}</span>
-        <span style={{ ...descStyle, display: "block" }}>{description}</span>
-        <span style={actionStyle}>{action}</span>
-      </Link>
-    );
-  }
-
-  // Non-interactive card keeps a real heading for the document outline.
-  return (
-    <div
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={cardStyle}
-    >
-      {badge}
-      <h2 style={titleStyle}>{title}</h2>
-      <p style={descStyle}>{description}</p>
-      <span style={actionStyle}>{action}</span>
     </div>
   );
 }
@@ -507,7 +532,7 @@ export function AboutPage() {
       <BackToTop topRef={topRef} />
 
       <SectionDivider id="about-accessibility" color={COLORS.azure}>Accessibility</SectionDivider>
-      <P>The Fair Feedback Project is designed for use by everyone, including instructors who rely on assistive technology. This project site has been audited against WCAG 2.1 Level AA — the international standard for digital accessibility — and revised to meet it (audit completed in June, 2026). This accessibility audit was conducted in collaboration with Claude (Opus 4.8), consistent with how the overall project was built. Practically, that means every interactive element can be reached and operated by keyboard; the question flows in the Instructor Track are structured so screen readers announce them clearly; focus moves sensibly as you navigate; generated materials and status messages are announced rather than appearing silently; and text meets contrast and readability guidelines.</P>
+      <P>The Fair Feedback Project is designed for use by everyone, including instructors who rely on assistive technology. This project site has been audited against WCAG 2.1 Level AA — the international standard for digital accessibility — and revised to meet it (audit completed in June, 2026). This accessibility audit was conducted in collaboration with Claude (Opus 4.8), consistent with how the overall project was built. Practically, that means every interactive element can be reached and operated by keyboard; the question flow for creating your materials is structured so screen readers announce them clearly; focus moves sensibly as you navigate; generated materials and status messages are announced rather than appearing silently; and text meets contrast and readability guidelines.</P>
       <P>In keeping with this project's commitment to transparency, we describe this as an aim we work toward, not a guarantee. Accessibility standards evolve, assistive technologies vary, and no audit catches everything. If you encounter a barrier — anything that makes the site harder to use than it should be — please tell us through the feedback form (link below in the footer), and we will work to fix it.</P>
       <BackToTop topRef={topRef} />
 
@@ -564,14 +589,14 @@ export function PrinciplesPage() {
       <SectionDivider id="prin-structural" color={COLORS.green}>1. Bias is structural</SectionDivider>
       <H2>1. Bias in student evaluations is a structural problem, not an individual failing.</H2>
       <P>The research makes clear that bias in student evaluations of teaching is systemic — rooted in cultural stereotypes, institutional norms, and evaluation instrument design. Individual instructors did not create this problem and cannot be expected to solve it alone.</P>
-      <P>The Fair Feedback Project provides individual-level strategies because they can be implemented immediately and the evidence suggests they can help. But it does so within an explicit framework that calls for institutional and policy-level reform. Every recommendation in the Instructor Track is accompanied by a clear acknowledgment that individual action is necessary but not sufficient, and the Institutional Track exists precisely to support the structural changes that the research calls for.</P>
+      <P>The Fair Feedback Project provides individual-level strategies because they can be implemented immediately and the evidence suggests they can help. But it does so within an explicit framework that calls for institutional and policy-level reform. Every recommendation the project makes is accompanied by a clear acknowledgment that individual action is necessary but not sufficient, and the About page and FAQ point departments and institutions toward the structural changes that the research calls for.</P>
       <P>We urge institutions to adopt the recommendations of the American Sociological Association's 2019 Statement on Student Evaluations of Teaching, endorsed by nearly two dozen scholarly organizations: use student evaluations as one component of a holistic assessment of teaching, not as a standalone metric; frame evaluation instruments as opportunities for student feedback rather than ratings of teaching effectiveness; and exercise caution in the use of evaluation data in personnel decisions.</P>
       <BackToTop topRef={topRef} />
 
       <SectionDivider id="prin-evidence" color={COLORS.green}>2. Evidence-based recommendations</SectionDivider>
       <H2>2. All recommendations are tied to specific research findings.</H2>
       <P>Every strategy, every piece of generated language, and every recommendation in The Fair Feedback Project is grounded in peer-reviewed scholarship. Where the evidence is strong, we say so. Where it is mixed, limited, or context-dependent, we say that too. We do not present contested findings as settled, and we do not extrapolate beyond what the data support.</P>
-      <P>This commitment shapes the project in concrete ways. When the Instructor Track generates anti-bias language for evaluation preambles, it draws on the specific messaging approaches that Peterson et al. (2019), Genetin et al. (2022), and Boring and Philippe (2021) found to be effective — and it steers instructors away from the normative and explicitly gendered framing that Boring and Philippe (2021) and Ayllón and Zamora (2025) found to be ineffective or counterproductive. When the project describes the likely effects of a strategy, it reports the range of findings across studies, including null results such as Owen, De Bruin, and Wu (2025) and variable results such as Mitchem et al. (2025), rather than cherry-picking only the positive outcomes.</P>
+      <P>This commitment shapes the project in concrete ways. When the project generates anti-bias language for evaluation preambles, it draws on the specific messaging approaches that Peterson et al. (2019), Genetin et al. (2022), and Boring and Philippe (2021) found to be effective — and it steers instructors away from the normative and explicitly gendered framing that Boring and Philippe (2021) and Ayllón and Zamora (2025) found to be ineffective or counterproductive. When the project describes the likely effects of a strategy, it reports the range of findings across studies, including null results such as Owen, De Bruin, and Wu (2025) and variable results such as Mitchem et al. (2025), rather than cherry-picking only the positive outcomes.</P>
       <P>Throughout the project, citations are provided so that university instructors, staff, and administrators can consult the original studies and make informed decisions for their own contexts.</P>
       <BackToTop topRef={topRef} />
 
@@ -958,9 +983,9 @@ export function InstructorTrack() {
 
       {step === 0 && (
         <div>
-          <span style={{ display: "inline-block", fontSize: 12, fontWeight: 500, color: COLORS.accent, background: COLORS.accentLight, padding: "3px 10px", borderRadius: 4, marginBottom: 16, textTransform: "uppercase", letterSpacing: "0.04em" }}>Instructor Track</span>
-          <h1 ref={headingRef} tabIndex={-1} style={{ fontFamily: "'Source Serif 4', Georgia, serif", fontSize: 30, fontWeight: 600, color: COLORS.slate900, margin: "0 0 1rem", lineHeight: 1.2, outline: "none" }}>Generate evidence-based materials</h1>
-          <p style={{ fontSize: 16, color: COLORS.slate600, lineHeight: 1.7, margin: "0 0 1rem" }}>The Instructor Track helps you generate evidence-based materials to promote fairer student evaluations in your courses. You'll answer a few questions about your course and how you'd like to use these materials. The process takes about two minutes.</p>
+          <span style={{ display: "inline-block", fontSize: 12, fontWeight: 500, color: COLORS.accent, background: COLORS.accentLight, padding: "3px 10px", borderRadius: 4, marginBottom: 16, textTransform: "uppercase", letterSpacing: "0.04em" }}>For instructors</span>
+          <h1 ref={headingRef} tabIndex={-1} style={{ fontFamily: "'Source Serif 4', Georgia, serif", fontSize: 30, fontWeight: 600, color: COLORS.slate900, margin: "0 0 1rem", lineHeight: 1.2, outline: "none" }}>Create your materials</h1>
+          <p style={{ fontSize: 16, color: COLORS.slate600, lineHeight: 1.7, margin: "0 0 1rem" }}>This tool helps you generate evidence-based materials to promote fairer student evaluations in your courses. You'll answer a few questions about your course and how you'd like to use these materials. The process takes about two minutes.</p>
           <p style={{ fontSize: 14, color: COLORS.slate500, lineHeight: 1.6, margin: "0 0 2rem" }}>Nothing you enter is saved, logged, or transmitted. All materials are generated in your browser and exist only in your session.</p>
           <button onClick={() => setStep(1)} style={{ background: COLORS.accent, color: COLORS.white, border: "none", borderRadius: 8, padding: "12px 28px", fontSize: 15, fontWeight: 500, cursor: "pointer", fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>Get started</button>
         </div>

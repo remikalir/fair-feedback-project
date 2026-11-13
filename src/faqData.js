@@ -16,7 +16,7 @@ export const FAQ_DATA = [
         "q": "What is The Fair Feedback Project?",
         "a": [
           "The Fair Feedback Project is an openly accessible, research-based resource designed to help higher education instructors and institutions address documented bias in student evaluations of teaching (SETs). The project was created by Remi Kalir, PhD, as a practical resource that simultaneously demonstrates how generative AI (specifically Claude Code/Opus 5.5) may be responsibly used to advance pedagogical innovation.",
-          "This project offers two tracks: an Instructor Track, which helps individual instructors generate evidence-based, course-specific mitigation strategies and materials for immediate use; and an Institutional Track, which provides resources and guidance for centers for teaching and learning, faculty leaders, and administrators working toward structural reform of how student feedback is collected, interpreted, and used in higher education. The project is designed to be useful across institutional types — research universities, liberal arts colleges, community colleges, and professional schools. All design decisions are grounded in peer-reviewed scholarship rather than any single institution's policies or practices."
+          "The project offers a free tool that helps individual instructors create evidence-based, course-specific materials for immediate use, and it makes the case throughout for structural reform of how student feedback is collected, interpreted, and used in higher education. The project is designed to be useful across institutional types — research universities, liberal arts colleges, community colleges, and professional schools. All design decisions are grounded in peer-reviewed scholarship rather than any single institution's policies or practices."
         ]
       },
       {
@@ -28,14 +28,14 @@ export const FAQ_DATA = [
       {
         "q": "Who is this for?",
         "a": [
-          "The Fair Feedback Project is designed for anyone involved in the teaching evaluation process in higher education. This includes individual instructors seeking practical strategies they can implement in their own courses this semester; educational developers and centers for teaching and learning looking for workshop materials, research summaries, and frameworks for campus conversations; department chairs responsible for interpreting evaluation data or supporting professional learning; as well as faculty and administrators involved in designing evaluation instruments, setting personnel policies, or making tenure and promotion decisions.",
+          "The Fair Feedback Project is designed for anyone involved in the teaching evaluation process in higher education. This includes individual instructors seeking practical strategies they can implement in their own courses this semester; educational developers and centers for teaching and learning looking for a research-grounded resource to share with faculty and frameworks for campus conversations; department chairs responsible for interpreting evaluation data or supporting professional learning; as well as faculty and administrators involved in designing evaluation instruments, setting personnel policies, or making tenure and promotion decisions.",
           "We encourage all instructors to engage with The Fair Feedback Project, not only those who may be disadvantaged by current evaluation practices. Bias mitigation is most effective — and most equitable — when it is treated as a shared professional practice rather than an individual response to a personal problem."
         ]
       },
       {
         "q": "Does The Fair Feedback Project collect any data?",
         "a": [
-          "No. The Fair Feedback Project does not collect, store, or transmit any user data. Any information you voluntarily provide while using the Instructor Track — such as your discipline, course level, or class size — is used solely to generate your materials in real time. Nothing is saved, logged, or accessible to anyone after your session. There are no individual accounts, no analytics tracking individual usage, and no way for us or anyone else to connect generated materials back to a specific person or course.",
+          "No. The Fair Feedback Project does not collect, store, or transmit any user data. Any information you voluntarily provide while creating your materials — such as your discipline, course level, or class size — is used solely to generate your materials in real time. Nothing is saved, logged, or accessible to anyone after your session. There are no individual accounts, no analytics tracking individual usage, and no way for us or anyone else to connect generated materials back to a specific person or course.",
           "We made this a foundational design choice because instructors — particularly those most affected by evaluation bias — should be able to explore these resources without concern that doing so will be visible to their institution, documented in any system, or used for any purpose beyond their own."
         ]
       }
@@ -74,7 +74,7 @@ export const FAQ_DATA = [
       {
         "q": "How does the project account for differences across disciplines and institutional types?",
         "a": [
-          "The Instructor Track asks about course-level contextual factors because the research identifies several variables that interact with evaluation bias. Evaluations in STEM fields tend to show different patterns than those in the humanities (Kreitzer & Sweet-Cushman, 2022). Large introductory courses present different challenges than small upper-level seminars. Required courses receive systematically different ratings than electives (Kogan, 2014). A department's gender composition shapes the role-congruity expectations that drive bias (Aragón, Pietri, & Powell, 2023).",
+          "The tool asks about course-level contextual factors because the research identifies several variables that interact with evaluation bias. Evaluations in STEM fields tend to show different patterns than those in the humanities (Kreitzer & Sweet-Cushman, 2022). Large introductory courses present different challenges than small upper-level seminars. Required courses receive systematically different ratings than electives (Kogan, 2014). A department's gender composition shapes the role-congruity expectations that drive bias (Aragón, Pietri, & Powell, 2023).",
           "The project uses these inputs to tailor its recommendations — for example, adjusting the emphasis of generated language or flagging strategies that may be more or less effective in a given context. However, we are transparent that the intervention research has been conducted in a limited range of institutional and disciplinary settings. Most experimental studies have been conducted at large public universities in introductory-level courses. Generalization to other contexts — small colleges, graduate seminars, clinical settings, online programs — requires caution, and we note this wherever relevant."
         ]
       }
@@ -105,7 +105,7 @@ export const FAQ_DATA = [
             ", an open-access journal. Genetin et al. (2022) pre-registered their study design. These are not informal workarounds — they are rigorously tested, transparent, evidence-based practices."
           ],
           "If you anticipate that colleagues or administrators might question your use of anti-bias language, The Fair Feedback Project can help you prepare. The project provides specific citations and summaries you can share with a department chair or tenure committee to contextualize the intervention as a response to well-documented measurement problems in student evaluations. Framing your use of these strategies as part of a professional commitment to fair evaluation — rather than an attempt to inflate your scores — is both accurate and consistent with how the researchers themselves describe the purpose of their interventions.",
-          "You may also find it useful to advocate for your institution to adopt anti-bias language at the departmental or institutional level, so that it becomes standard practice rather than an individual choice. The Institutional Track of The Fair Feedback Project provides resources to support that conversation."
+          "You may also find it useful to advocate for your institution to adopt anti-bias language at the departmental or institutional level, so that it becomes standard practice rather than an individual choice. The section of this FAQ for departments and institutions, and the About page, offer starting points for that conversation."
         ]
       },
       {
@@ -120,7 +120,7 @@ export const FAQ_DATA = [
         "a": [
           "The research supports a range of approaches, from a brief written statement to a substantive classroom discussion. A written preamble — delivered through the evaluation instrument, an email, or an LMS announcement — requires the least class time and most closely replicates the experimental conditions in the literature.",
           "However, some instructors may wish to go further. A growing number of faculty are incorporating discussions of evaluation bias into their courses, treating it as a teaching moment about critical thinking, research methods, or equity — topics that are already part of many curricula. This approach is consistent with the broader pedagogical case for transparency in teaching, and some practitioners have argued that it can be more impactful than a standalone written statement precisely because it engages students in active reflection rather than passive reading.",
-          "If you choose to hold a classroom discussion, we recommend framing it around the research evidence rather than your personal experience. Students are more receptive to information about documented patterns across institutions than to a conversation that may feel like a plea for better ratings. The Instructor Track can generate a discussion guide tailored to your course context."
+          "If you choose to hold a classroom discussion, we recommend framing it around the research evidence rather than your personal experience. Students are more receptive to information about documented patterns across institutions than to a conversation that may feel like a plea for better ratings. The Fair Feedback Project can generate a discussion guide tailored to your course context."
         ]
       }
     ]
@@ -171,13 +171,13 @@ export const FAQ_DATA = [
   },
   {
     "id": "faq-institutional",
-    "navLabel": "Institutional use",
-    "heading": "Institutional use",
+    "navLabel": "For departments and institutions",
+    "heading": "For departments and institutions",
     "items": [
       {
         "q": "How can a center for teaching and learning use The Fair Feedback Project?",
         "a": [
-          "The Institutional Track provides resources designed for faculty development contexts. Centers for teaching and learning and similar campus offices can use the research summaries and evidence briefs to anchor workshops on evaluation bias; use the generated anti-bias language as a starting point for developing institution-wide evaluation preambles; share the project with faculty as part of orientation programming or pre-evaluation-season communications; use the Principles and About sections as a framework for conversations about evaluation reform; and draw on the institutional case studies and reform models to build a case for policy change with administrators and faculty governance bodies.",
+          "Centers for teaching and learning and similar campus offices can share the project with faculty as part of orientation programming or pre-evaluation-season communications; use the generated anti-bias language as a starting point for developing department- or institution-wide evaluation preambles; and use the Principles and About pages, including the institutional examples and the American Sociological Association's 2019 statement described there, as a framework for conversations about evaluation reform with administrators and faculty governance bodies.",
           "The project is designed to complement, not replace, broader institutional reform efforts. University centers, offices, departments, and other groups that are already engaged in teaching evaluation reform — through teaching quality frameworks, peer observation protocols, or holistic evaluation models — may find The Fair Feedback Project useful as one component of that larger work, particularly for addressing the specific problem of bias in the student feedback component of a multi-source evaluation system."
         ]
       },
@@ -186,7 +186,7 @@ export const FAQ_DATA = [
         "a": [
           "Yes, and the research suggests this may be more effective and more equitable than individual adoption. When anti-bias language is standard — included in the evaluation instrument for all courses rather than added optionally by individual instructors — it avoids placing the burden of bias mitigation on those most affected by bias. It also avoids the concern that individual use might be perceived as an attempt to manipulate evaluations, since the language applies uniformly.",
           "However, institutional adoption also carries risks. Peterson et al. (2019) cautioned that if anti-bias language became universal, students might habituate to it and its effects could diminish. Ayllón and Zamora (2025) found that only about 13% of treated students actually watched a debiasing video when participation was voluntary, raising questions about compliance in institutional deployments. And any institutional language will need to be carefully framed — the evidence clearly favors informational over normative approaches, and institutions should resist the temptation to add language that sounds appropriately strong but that the research suggests is counterproductive.",
-          "The Fair Feedback Project can generate language suitable for institutional adoption, and the Institutional Track provides guidance on how to implement it effectively."
+          "The language The Fair Feedback Project generates can serve as a starting point for departmental or institutional adoption, ideally alongside the broader reform resources noted elsewhere in this FAQ, such as the TEval framework and the DeLTA project."
         ]
       },
       {
