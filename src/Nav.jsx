@@ -6,6 +6,8 @@ const NAV_ITEMS = [
   { to: "/about", label: "About" },
   { to: "/principles", label: "Principles" },
   { to: "/faq", label: "FAQ" },
+  // The tool itself: a second entry point alongside the homepage button.
+  { to: "/instructor", label: "Create your materials", primary: true },
 ];
 
 export default function Nav() {
@@ -53,8 +55,8 @@ export default function Nav() {
                 padding: "6px 12px",
                 borderRadius: 6,
                 fontSize: 14,
-                color: isActive ? COLORS.slate900 : COLORS.slate600,
-                fontWeight: isActive ? 500 : 400,
+                color: isActive ? COLORS.slate900 : item.primary ? COLORS.accent : COLORS.slate600,
+                fontWeight: isActive || item.primary ? 500 : 400,
                 transition: "all 0.15s ease",
                 fontFamily: "'Source Sans 3', system-ui, sans-serif",
                 textDecoration: "none",
