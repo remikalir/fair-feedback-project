@@ -12,7 +12,7 @@ Created by Remi Kalir, PhD, in collaboration with Claude. Released under [CC BY-
 
 ## Development
 
-Requires Node 22 (see `.nvmrc`).
+Requires Node 24 (see `.nvmrc`; matches the Vercel project setting).
 
 ```sh
 npm install
