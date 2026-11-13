@@ -573,6 +573,7 @@ const REFERENCES = [
   "Peterson, D. A. M., Biederman, L. A., Andersen, D., Ditonto, T. M., & Roe, K. (2019). Mitigating gender bias in student evaluations of teaching. PLoS ONE, 14(5), e0216241.",
   "Reinsch, R. W., Goltz, S. M., & Hietapelto, A. B. (2020). Student evaluations and the problem of implicit bias. Journal of College and University Law, 45(1), 114–140.",
   "Uttl, B., White, C. A., & Gonzalez, D. W. (2017). Meta-analysis of faculty's teaching effectiveness: Student evaluation of teaching ratings and student learning are not related. Studies in Educational Evaluation, 54, 22–42.",
+  "Watkins, M. (2026, March 30). Who (or what) filled out your course evaluation? Rhetorica (Substack).",
 ];
 
 export function PrinciplesPage() {
@@ -717,6 +718,8 @@ I want you to know that evaluations are consequential. They are used in decision
 
 So when you complete the evaluation, I'd encourage you to focus on things like: ${specificGuidance} These are the kinds of observations that are most valuable — both for improving this course and for fairly assessing instruction.
 
+One more request: if you write comments, please write them in your own words. Your specific observations about your own experience in this course are what make written feedback useful, and that's something no AI tool can provide for you.
+
 I'm not asking for higher ratings — I'm asking for more accurate ones. Your honest feedback, focused on the course and your learning, helps make the evaluation process fairer for everyone. Thank you.`;
   return text;
 }
@@ -734,7 +737,7 @@ As the evaluation period approaches, I want to share some context about how cour
 
 Research across multiple disciplines has found that student evaluations can be influenced by unconscious biases and by factors unrelated to teaching quality — including class size, discipline, and whether a course is required. Your evaluations are taken seriously and play a meaningful role in instructors' professional development and career progression.
 
-When completing the evaluation, I'd encourage you to focus on your learning experience: ${contentFocus}. Feedback that addresses these specific elements is most useful for improving instruction and for fairly assessing teaching.
+When completing the evaluation, I'd encourage you to focus on your learning experience: ${contentFocus}. Feedback that addresses these specific elements is most useful for improving instruction and for fairly assessing teaching. If you write comments, please write them in your own words; your specific observations about your experience in this course are what make written feedback useful.
 
 Thank you for taking the time to provide thoughtful feedback. Your perspective genuinely matters.`;
   return text;
@@ -799,8 +802,8 @@ For more information, visit The Fair Feedback Project.`;
 
 const EVIDENCE_NOTES = {
   preamble: "This language is modeled on the intervention that Peterson et al. (2019) found to improve evaluation accuracy for female instructors by approximately half a point on a five-point scale, with no effect on male instructor ratings. Genetin et al. (2022) found similar effects for racial and ethnic minority instructors. The informational framing used here is consistent with approaches shown to be effective; normative \"don't discriminate\" framing and explicitly gendered language have been shown to be ineffective or counterproductive (Boring & Philippe, 2021; Ayllón & Zamora, 2025).",
-  script: "This script extends the evaluation preamble into a conversational format. While the experimental research primarily tested written preambles, the pedagogical case for transparency about evaluation bias is supported by practitioner literature. The core elements preserved here — informational framing, high-stakes emphasis, and redirection toward course content — are drawn from the effective interventions in Peterson et al. (2019) and Genetin et al. (2022).",
-  lms: "This announcement adapts the evidence-based messaging from Peterson et al. (2019) and Genetin et al. (2022) for asynchronous delivery. Boring and Philippe (2021) used email as their primary delivery mechanism and found the informational treatment effective in that format.",
+  script: "This script extends the evaluation preamble into a conversational format. While the experimental research primarily tested written preambles, the pedagogical case for transparency about evaluation bias is supported by practitioner literature. The core elements preserved here — informational framing, high-stakes emphasis, and redirection toward course content — are drawn from the effective interventions in Peterson et al. (2019) and Genetin et al. (2022). The request that students write any comments in their own words responds to an emerging concern that students may use AI tools to write evaluation comments (Watkins, 2026). Unlike the rest of this language, it has not been tested in research; keep or remove it as fits your course.",
+  lms: "This announcement adapts the evidence-based messaging from Peterson et al. (2019) and Genetin et al. (2022) for asynchronous delivery. Boring and Philippe (2021) used email as their primary delivery mechanism and found the informational treatment effective in that format. The request that students write any comments in their own words responds to an emerging concern that students may use AI tools to write evaluation comments (Watkins, 2026). Unlike the rest of this language, it has not been tested in research; keep or remove it as fits your course.",
   discussion: "Structured classroom discussions about evaluation bias have been recommended by practitioners and education scholars as a complement to written statements. While this approach has not been tested in the same rigorous experimental designs as the evaluation preamble, it is consistent with the broader pedagogical case for transparency and critical reflection in teaching.",
   selfAffirmation: "This prompt is based on Hoorens, Dekkers, and Deschrijver (2021), who found that self-affirmation exercises eliminated gender bias in evaluations by reducing inflated ratings for male professors. Note that this approach works through a different mechanism than the anti-bias statement — it is not a substitute but a complement.",
   portfolio: "Including a contextual statement about evaluation data in your teaching portfolio is consistent with the American Sociological Association's 2019 recommendations and with the broader movement toward holistic teaching evaluation documented in McCreary (2026) and Austin et al. (2025).",

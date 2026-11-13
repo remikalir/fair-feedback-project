@@ -139,6 +139,14 @@ export const FAQ_DATA = [
         ]
       },
       {
+        "q": "What about students using AI to write their evaluation comments?",
+        "a": [
+          "This is a real and emerging concern, first raised with us by an instructor who used the project. Students increasingly use generative AI for written work, and evaluation comments are no exception. Marc Watkins (2026) argues that evaluations completed by AI are not a reflection of student experience and should not be treated as valid evidence, which matters because student evaluations feed into reappointment, promotion, and tenure decisions.",
+          "As of this writing, we are not aware of peer-reviewed research measuring how often students use AI to write evaluation comments, or how doing so interacts with the biases documented elsewhere on this site. Watkins also notes that AI-detection tools produce unacceptable rates of both false positives and false negatives, so trying to identify and discount individual comments as AI-written is not a sound response, and it risks misjudging comments that students wrote themselves.",
+          "The in-class script and the email or LMS announcement therefore include one sentence inviting students to write any comments in their own words. Unlike the evaluation preamble, this request has not been tested in research. It is offered as a reasonable, low-cost response to a fast-changing situation, and you can keep or remove it. The larger question of how evaluation data should be collected and verified is one for institutions, not individual instructors."
+        ]
+      },
+      {
         "q": "Should my institution still be using student evaluations in tenure and promotion decisions?",
         "a": [
           "The American Sociological Association, joined by nearly two dozen scholarly organizations, recommends against using student evaluations as a primary or standalone metric in personnel decisions. This recommendation is grounded in evidence that SETs are weakly related to student learning (Boring, Ottoboni, & Stark, 2016; Uttl, White, & Gonzalez, 2017), systematically biased against marginalized faculty, and statistically misused (means of skewed distributions, small differences treated as meaningful, low response rates ignored).",
