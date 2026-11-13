@@ -20,7 +20,7 @@ export default function Footer() {
       <p style={{ margin: "0 4px" }}>Created by <a href="https://remikalir.com" target="_blank" rel="noopener noreferrer" style={linkStyle}
           onMouseEnter={(e) => e.target.style.color = COLORS.accent}
           onMouseLeave={(e) => e.target.style.color = COLORS.slate500}
-        >Remi Kalir, PhD</a>, in collaboration with Claude (Opus 4.6 & 4.8)
+        >Remi Kalir, PhD</a>, in collaboration with Claude (Opus 5.5)
         <span style={{ margin: "0 8px" }}>|</span>
         Not affiliated with any institution</p>
       <p style={{ margin: "0 0 4px" }}>Please cite as: Kalir, R. (2026). The Fair Feedback Project. https://fairfeedbackproject.org — released under CC BY-NC-SA 4.0.</p>

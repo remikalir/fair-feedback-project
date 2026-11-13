@@ -15,7 +15,7 @@ export const FAQ_DATA = [
       {
         "q": "What is The Fair Feedback Project?",
         "a": [
-          "The Fair Feedback Project is an openly accessible, research-based resource designed to help higher education instructors and institutions address documented bias in student evaluations of teaching (SETs). The project was created by Remi Kalir, PhD, as a practical resource that simultaneously demonstrates how generative AI (specifically Claude Code/Opus 4.6 & 4.8) may be responsibly used to advance pedagogical innovation.",
+          "The Fair Feedback Project is an openly accessible, research-based resource designed to help higher education instructors and institutions address documented bias in student evaluations of teaching (SETs). The project was created by Remi Kalir, PhD, as a practical resource that simultaneously demonstrates how generative AI (specifically Claude Code/Opus 5.5) may be responsibly used to advance pedagogical innovation.",
           "This project offers two tracks: an Instructor Track, which helps individual instructors generate evidence-based, course-specific mitigation strategies and materials for immediate use; and an Institutional Track, which provides resources and guidance for centers for teaching and learning, faculty leaders, and administrators working toward structural reform of how student feedback is collected, interpreted, and used in higher education. The project is designed to be useful across institutional types — research universities, liberal arts colleges, community colleges, and professional schools. All design decisions are grounded in peer-reviewed scholarship rather than any single institution's policies or practices."
         ]
       },
