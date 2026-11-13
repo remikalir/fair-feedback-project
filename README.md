@@ -1,16 +1,34 @@
-# React + Vite
+# The Fair Feedback Project
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An openly accessible, research-based resource that helps instructors address documented bias in student evaluations of teaching (SETs).
 
-Currently, two official plugins are available:
+Live site: https://fairfeedbackproject.org
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Citation and license
 
-## React Compiler
+Kalir, R. (2026). *The Fair Feedback Project*. https://fairfeedbackproject.org
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Created by Remi Kalir, PhD, in collaboration with Claude. Released under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/).
 
-## Expanding the ESLint configuration
+## Development
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Requires Node 22 (see `.nvmrc`).
+
+```sh
+npm install
+npm run dev      # local dev server at http://localhost:5173
+npm run lint
+npm run build    # static prerender to build/client/
+```
+
+## Architecture notes
+
+- **React Router v8, framework mode, static prerender** (`ssr: false`). Every route in `react-router.config.js` is prerendered to HTML at build time; there is no server at runtime.
+- **React Router versions are pinned exactly.** `react-router`, `@react-router/node`, and `@react-router/dev` must move together. 8.1.0 previously failed with an internal module-resolution error; 8.5.1 was verified in November 2026 (prerendered output identical to 8.0.0).
+- **Content as data.** The FAQ lives in `src/faqData.js`, which drives both the visible FAQ page and the FAQPage JSON-LD, so the two cannot drift. New structured content should follow this pattern.
+- **Per-route metadata** (titles, descriptions, canonicals, Open Graph/Twitter cards) is built by `src/routeMeta.js`.
+- **OG image** is rendered by `tools/render_og.py` (Pillow).
+
+## Deployment
+
+Vercel builds `react-router build` and serves `build/client/` (see `vercel.json`). Pushes to `main` deploy to production; other branches get preview deployments.

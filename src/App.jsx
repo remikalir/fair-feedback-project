@@ -802,7 +802,7 @@ function getContextFlags(ctx) {
   return flags;
 }
 
-function OutputBlock({ title, text, evidence, accent }) {
+function OutputBlock({ title, text, evidence }) {
   const [copied, setCopied] = useState(false);
   const [copyFailed, setCopyFailed] = useState(false);
   const copy = async () => {
@@ -1109,7 +1109,7 @@ function StepHeader({ step, total, title, headingRef }) {
   );
 }
 
-function StepNav({ step, canProceed, onBack, onNext, nextLabel, hint }) {
+function StepNav({ canProceed, onBack, onNext, nextLabel, hint }) {
   const showHint = hint && !canProceed;
   return (
     <div style={{ margin: "2rem 0 0" }}>
