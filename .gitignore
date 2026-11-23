@@ -26,3 +26,6 @@ dist-ssr
 # React Router framework mode
 .react-router/
 /build
+
+# Files saved here by the Claude desktop app (carousels, drafts); not site source
+/Claude outputs/
